@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
     application
 }
 
@@ -30,7 +31,11 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -41,11 +46,16 @@ kotlin {
                 implementation("io.ktor:ktor-server-netty:1.6.3")
                 implementation("io.ktor:ktor-html-builder:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+                implementation("com.fasterxml.jackson.core:jackson-core:2.13.1")
+                implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
+                implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
             }
         }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
+                implementation(kotlin("stdlib-js"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.240-kotlin-1.5.30")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.240-kotlin-1.5.30")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.1-pre.240-kotlin-1.5.30")
@@ -68,11 +78,4 @@ tasks.named<Copy>("jvmProcessResources") {
 tasks.named<JavaExec>("run") {
     dependsOn(tasks.named<Jar>("jvmJar"))
     classpath(tasks.named<Jar>("jvmJar"))
-}
-
-dependencies {
-    implementation(kotlin("stdlib-js"))
-    implementation("com.fasterxml.jackson.core:jackson-core:2.13.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
 }

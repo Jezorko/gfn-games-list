@@ -8,9 +8,11 @@ import io.ktor.response.*
 
 val objectMapper = ObjectMapper().registerKotlinModule()
 
-suspend fun ApplicationCall.respondJson(
+suspend fun <T> ApplicationCall.respondJson(status: HttpStatusCode? = null, value: T) = respondJson(status) { value }
+
+suspend fun <T> ApplicationCall.respondJson(
     status: HttpStatusCode? = null,
-    provider: suspend () -> Any
+    provider: () -> T
 ) {
     respondText(
         contentType = ContentType.Application.Json,

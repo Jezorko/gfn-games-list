@@ -1,6 +1,6 @@
+import api.ApiClient
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
-import org.w3c.dom.HTMLInputElement
 import react.Props
 import react.RBuilder
 import react.RComponent
@@ -37,9 +37,11 @@ class Welcome(props: WelcomeProps) : RComponent<WelcomeProps, WelcomeState>(prop
                 type = InputType.text
                 value = state.name
                 onChangeFunction = { event ->
-                    setState(
-                        WelcomeState(name = (event.target as HTMLInputElement).value)
-                    )
+                    ApiClient().getMessages("pl-PL").then {
+                        setState(
+                            WelcomeState(name = it!!.supportedGamesCount)
+                        )
+                    }
                 }
             }
         }
