@@ -12,6 +12,8 @@ internal object Games : UUIDTable() {
     val launcher = varchar("launcher", 255)
     val launcherGameId = varchar("launcher_game_id", 255)
     val imageUrl = varchar("image_url", 255)
+    val registeredAt = long("registered_at").default(-1)
+    val updatedAt = long("updated_at")
 
 }
 
@@ -23,5 +25,7 @@ internal class GameEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var launcher by Games.launcher
     var launcherGameId by Games.launcherGameId
     var imageUrl by Games.imageUrl
+    var registeredAt by Games.registeredAt
+    var updatedAt by Games.updatedAt
 
 }

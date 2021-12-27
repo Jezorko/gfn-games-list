@@ -22,6 +22,8 @@ internal object GamesRepository {
                 launcher = game.launcher.toString()
                 title = game.title
                 imageUrl = game.imageUrl
+                registeredAt = if (registeredAt < 0L) game.registeredAt else registeredAt
+                updatedAt = game.updatedAt
             }
         )
     }
@@ -40,7 +42,9 @@ internal object GamesRepository {
                         Launcher.UNKNOWN
                     },
                     launcherGameId = it.launcherGameId,
-                    imageUrl = it.imageUrl
+                    imageUrl = it.imageUrl,
+                    registeredAt = it.registeredAt,
+                    updatedAt = it.updatedAt
                 )
             }
     }

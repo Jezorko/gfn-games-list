@@ -3,6 +3,7 @@ package jezorko.github.gfngameslist.games
 import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.nvidia.NVidiaApiClient
 import mu.KotlinLogging.logger
+import java.lang.System.currentTimeMillis
 
 internal object GamesService {
 
@@ -12,6 +13,7 @@ internal object GamesService {
 
     suspend fun updateIfNeeded() {
         doInTransaction {
+            val timestampNow = currentTimeMillis()
             if (LatestUpdatesRepository.shouldUpdate()) {
                 log.info { "games update needed, starting" }
                 (NVidiaApiClient.fetchSupportedGamesList() ?: emptyList())
@@ -20,7 +22,9 @@ internal object GamesService {
                             title = supportedGame.name,
                             launcher = supportedGame.launcher,
                             launcherGameId = supportedGame.launcherGameId,
-                            imageUrl = supportedGame.imageUrl
+                            imageUrl = supportedGame.imageUrl,
+                            registeredAt = timestampNow,
+                            updatedAt = timestampNow
                         )
                     }
                     .forEach(GamesRepository::putGame)
