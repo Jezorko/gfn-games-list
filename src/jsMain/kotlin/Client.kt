@@ -1,13 +1,16 @@
-import react.dom.render
+import components.GameDataRow
 import kotlinx.browser.document
 import kotlinx.browser.window
+import react.dom.render
 
 fun main() {
     window.onload = {
         render(document.getElementById("root")) {
-            child(Welcome::class) {
+            child(GameDataRow::class) {
                 attrs {
-                    name = "Kotlin/JS"
+                    id = 0
+                    imageUrl = "https://geforcenow-games.com/media/games/251570.jpg"
+                    gameTitle = "Test"
                 }
             }
         }

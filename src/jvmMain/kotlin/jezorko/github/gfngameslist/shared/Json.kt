@@ -5,8 +5,11 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
+import kotlin.reflect.KClass
 
-val objectMapper = ObjectMapper().registerKotlinModule()
+private val objectMapper = ObjectMapper().registerKotlinModule()
+
+fun <T : Any> parseJson(value: String, clazz: KClass<T>) = objectMapper.readValue(value, clazz.java)
 
 suspend fun <T> ApplicationCall.respondJson(status: HttpStatusCode? = null, value: T) = respondJson(status) { value }
 

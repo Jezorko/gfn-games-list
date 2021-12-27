@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.Mode.DEVELOPMENT
+
 plugins {
     kotlin("multiplatform") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
@@ -27,6 +29,7 @@ kotlin {
         browser {
             commonWebpackConfig {
                 cssSupport.enabled = true
+                mode = DEVELOPMENT
             }
         }
     }
