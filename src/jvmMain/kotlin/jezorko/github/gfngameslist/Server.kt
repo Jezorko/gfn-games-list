@@ -21,7 +21,7 @@ fun HTML.index() {
         div {
             id = "root"
         }
-        script(src = "/static/kotlin-fullstack-example.js") {}
+        script(src = "/static/gfn-games-list.js") {}
     }
 }
 

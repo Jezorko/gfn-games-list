@@ -7,5 +7,5 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "kotlin-fullstack-example"
+rootProject.name = "gfn-games-list"
 
