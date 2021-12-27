@@ -45,14 +45,23 @@ kotlin {
             }
         }
         val jvmMain by getting {
+            val exposedVersion = "0.34.1"
+            val testContainersVersion = "1.16.2"
             dependencies {
                 implementation("io.ktor:ktor-server-netty:1.6.3")
                 implementation("io.ktor:ktor-html-builder:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
+                implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+                implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+                implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+                implementation("org.postgresql:postgresql:42.3.1")
+                implementation("org.testcontainers:testcontainers:$testContainersVersion")
+                implementation("org.testcontainers:postgresql:$testContainersVersion")
                 implementation("ch.qos.logback:logback-classic:1.2.3")
                 implementation("com.fasterxml.jackson.core:jackson-core:2.13.1")
                 implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+                implementation("io.github.microutils:kotlin-logging:1.12.5")
             }
         }
         val jvmTest by getting

@@ -7,7 +7,10 @@ import io.ktor.http.content.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.pipeline.*
+import jezorko.github.gfngameslist.games.gamesRoutes
 import jezorko.github.gfngameslist.localization.localizationRoutes
+import jezorko.github.gfngameslist.shared.Configuration
 import kotlinx.html.*
 
 fun HTML.index() {
@@ -28,7 +31,7 @@ fun HTML.index() {
 fun main() {
 
 
-    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
+    embeddedServer(Netty, port = Configuration.SERVER_PORT.value, host = "127.0.0.1") {
         routing {
             get("/") {
                 call.respondHtml(HttpStatusCode.OK, HTML::index)
@@ -36,6 +39,15 @@ fun main() {
             static("/static") {
                 resources()
             }
-        }.merge(localizationRoutes())
+        }.mergeAll(
+            localizationRoutes(),
+            gamesRoutes()
+        )
     }.start(wait = true)
+}
+
+fun <TSubject : Any, TContext : Any> Pipeline<TSubject, TContext>.mergeAll(
+    vararg pipelines: Pipeline<TSubject, TContext>
+) {
+    pipelines.forEach(this::merge)
 }
