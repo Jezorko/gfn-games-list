@@ -3,11 +3,10 @@ plugins {
     application
 }
 
-group = "com.example"
+group = "jezorko.github"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
 }
@@ -58,7 +57,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("com.example.application.ServerKt")
+    mainClass.set("jezorko.github.gfngameslist.ServerKt")
 }
 
 tasks.named<Copy>("jvmProcessResources") {
@@ -69,4 +68,11 @@ tasks.named<Copy>("jvmProcessResources") {
 tasks.named<JavaExec>("run") {
     dependsOn(tasks.named<Jar>("jvmJar"))
     classpath(tasks.named<Jar>("jvmJar"))
+}
+
+dependencies {
+    implementation(kotlin("stdlib-js"))
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
 }
