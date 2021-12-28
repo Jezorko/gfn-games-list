@@ -31,6 +31,9 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 styledImg {
                     attrs {
                         src = props.game.imageUrl
+                        css {
+                            +GameDataRowStyles.gameImage
+                        }
                     }
                 }
             }
@@ -40,6 +43,14 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 }
                 styledDiv {
                     +props.game.title
+                }
+            }
+            styledTd {
+                css {
+                    +GameDataRowStyles.tableData
+                }
+                styledDiv {
+                    +props.game.launcher.toString()
                 }
             }
         }

@@ -2,9 +2,11 @@ package jezorko.github.gfngameslist.games
 
 import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.database.Database.insertOrUpdate
+import jezorko.github.gfngameslist.database.Database.optionalAnd
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.upperCase
 
 internal object GamesRepository {
 
@@ -26,13 +28,11 @@ internal object GamesRepository {
         }
     }
 
-    internal fun getGames(limit: Int, titlePart: String?) = doInTransaction {
+    internal fun getGames(limit: Int, titlePart: String?, launcher: Launcher?) = doInTransaction {
         Games.select {
-            (Games.launcher notInList listOf(Launcher.NONE, Launcher.UNKNOWN).map(Launcher::name))
-                .let {
-                    if (titlePart != null) it and (Games.title like "%$titlePart%")
-                    else it
-                }
+            (Games.launcher notInList unsupportedLaunchers.map(Launcher::name))
+                .optionalAnd(titlePart) { Games.title.upperCase() like "%${it.uppercase()}%" }
+                .optionalAnd(launcher) { Games.launcher eq it.name }
         }.orderBy(Games.title).limit(limit)
             .map {
                 Game(

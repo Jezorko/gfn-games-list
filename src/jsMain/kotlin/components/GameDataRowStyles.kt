@@ -1,8 +1,7 @@
 package components
 
 
-import kotlinx.css.backgroundColor
-import kotlinx.css.color
+import kotlinx.css.*
 import styled.StyleSheet
 
 object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {
@@ -12,5 +11,10 @@ object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {
 
     val tableData by css {
         color = Styles.textColor
+    }
+
+    val gameImage by css {
+        maxWidth = LinearDimension("10%")
+        maxHeight = LinearDimension("10%")
     }
 } 

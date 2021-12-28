@@ -8,10 +8,16 @@ fun Application.gamesRoutes() = routing {
     get("/api/games") {
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
         val titlePart = call.request.queryParameters["title"]
+        val launcherParam = call.request.queryParameters["launcher"]
+        val launcher = if (launcherParam != null) try {
+            Launcher.valueOf(launcherParam)
+        } catch (exception: IllegalArgumentException) {
+            null
+        } else null
 
         call.respondJson(provider = {
             GetGamesResponse(
-                games = GamesService.getGames(limit, titlePart),
+                games = GamesService.getGames(limit, titlePart, launcher),
                 lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt()
             )
         })

@@ -6,6 +6,9 @@ enum class Launcher {
     STEAM, EPIC, ORIGIN, NONE, UPLAY, UNKNOWN;
 }
 
+val unsupportedLaunchers = setOf(Launcher.UNKNOWN, Launcher.NONE)
+val validLaunchers = Launcher.values().toSet() - unsupportedLaunchers
+
 @Serializable
 data class Game(
     val title: String,

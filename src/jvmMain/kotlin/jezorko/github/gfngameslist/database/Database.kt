@@ -75,4 +75,9 @@ object Database {
         return select(where).limit(1).firstOrNull() ?: insert { this.insert(it) }.resultedValues!!.first()
     }
 
+    fun <T> Op<Boolean>.optionalAnd(value: T?, mapper: (T) -> Op<Boolean>): Op<Boolean> {
+        return if (value != null) this and (mapper(value))
+        else this
+    }
+
 }

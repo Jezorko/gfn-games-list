@@ -9,7 +9,8 @@ internal object GamesService {
 
     private val log = logger { }
 
-    fun getGames(limit: Int = 10, titlePart: String? = null) = GamesRepository.getGames(limit, titlePart)
+    fun getGames(limit: Int = 10, titlePart: String? = null, launcher: Launcher? = null) =
+        GamesRepository.getGames(limit, titlePart, launcher)
 
     suspend fun updateIfNeeded() {
         doInTransaction {
