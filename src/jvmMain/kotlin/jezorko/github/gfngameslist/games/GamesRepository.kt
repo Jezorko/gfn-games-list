@@ -30,7 +30,7 @@ internal object GamesRepository {
 
     internal fun countSupportedGames() = doInTransaction {
         Games.select { Games.launcher notInList unsupportedLaunchers.map(Launcher::name) }
-            .distinctBy { Games.title }
+            .distinctBy { it[Games.title] }
             .count()
     }
 
