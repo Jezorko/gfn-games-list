@@ -6,12 +6,15 @@ import jezorko.github.gfngameslist.games.Launcher
 import jezorko.github.gfngameslist.games.validLaunchers
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
+import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
 import localization.Language
 import localization.languageFromReadableName
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventListener
 import react.Props
 import react.RBuilder
 import react.RComponent
@@ -25,10 +28,13 @@ import styled.styledInput
 import styled.styledSelect
 import kotlin.reflect.KMutableProperty1
 
+var updatingOnScroll = false
+
 external interface MainPageState : State {
     var language: Language?
     var messages: Messages?
     var limitSearch: Int?
+    var searchPage: Int?
     var titleSearch: String?
     var launcherSearch: Launcher?
     var getGamesResponse: GetGamesResponse?
@@ -43,7 +49,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     override fun RBuilder.render() {
         styledDiv {
-            +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0L]
+            +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0]
         }
         styledSelect {
             +Language.ENGLISH.readableName
@@ -83,6 +89,33 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 }
             }
         }
+        window.addEventListener("scroll", object : EventListener {
+            override fun handleEvent(event: Event) {
+                if (
+                    window.scrollY + window.innerHeight
+                    >= (document.body?.offsetHeight?.minus(500) ?: Int.MAX_VALUE)
+                    && !updatingOnScroll
+                ) {
+                    updatingOnScroll = true
+                    setState { searchPage = searchPage?.plus(1) ?: 1 }.then {
+                        ApiClient.getGames(
+                            state.limitSearch ?: 10,
+                            it.searchPage!!,
+                            state.titleSearch,
+                            state.launcherSearch
+                        ).then { response ->
+                            setState {
+                                getGamesResponse = getGamesResponse?.copy(
+                                    games = getGamesResponse?.games?.plus(response.games) ?: response.games
+                                ) ?: response
+                            }.then {
+                                updatingOnScroll = false
+                            }
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun updateState(prop: KMutableProperty1<MainPageState, String?>) = updateSearchParam(prop) { it }
@@ -93,7 +126,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     private fun updateGamesList() {
-        ApiClient.getGames(state.limitSearch ?: 10, state.titleSearch, state.launcherSearch)
+        ApiClient.getGames(state.limitSearch ?: 10, 0, state.titleSearch, state.launcherSearch)
             .then { response ->
                 setState { getGamesResponse = response }
             }

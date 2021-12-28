@@ -31,11 +31,16 @@ object ApiClient {
         }
     }
 
-    fun getGames(limit: Int = 10, titlePart: String? = null, launcher: Launcher?): Promise<GetGamesResponse> {
+    fun getGames(
+        limit: Int = 10,
+        page: Int = 0,
+        titlePart: String? = null,
+        launcher: Launcher?
+    ): Promise<GetGamesResponse> {
         val titlePartParam = if (titlePart != null) "&title=${encodeURIComponent(titlePart)}" else ""
         val launcherParam = if (launcher != null) "&launcher=${launcher.name}" else ""
         return window.fetch(
-            "/api/games?limit=$limit$titlePartParam$launcherParam",
+            "/api/games?limit=$limit&page=$page$titlePartParam$launcherParam",
             object : RequestInit {
                 override var method: String? = "GET"
             }

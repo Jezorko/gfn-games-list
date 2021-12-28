@@ -29,29 +29,33 @@ internal object GamesRepository {
     }
 
     internal fun countSupportedGames() = doInTransaction {
-        Games.select { Games.launcher notInList unsupportedLaunchers.map(Launcher::name) }.count()
+        Games.select { Games.launcher notInList unsupportedLaunchers.map(Launcher::name) }
+            .distinctBy { Games.title }
+            .count()
     }
 
-    internal fun getGames(limit: Int, titlePart: String?, launcher: Launcher?) = doInTransaction {
+    internal fun getGames(limit: Int, page: Int, titlePart: String?, launcher: Launcher?) = doInTransaction {
         Games.select {
             (Games.launcher notInList unsupportedLaunchers.map(Launcher::name))
                 .optionalAnd(titlePart) { Games.title.upperCase() like "%${it.uppercase()}%" }
                 .optionalAnd(launcher) { Games.launcher eq it.name }
-        }.orderBy(Games.title).limit(limit)
-            .map {
-                Game(
-                    title = it[Games.title],
-                    launcher = try {
-                        Launcher.valueOf(it[Games.launcher])
-                    } catch (exception: IllegalArgumentException) {
-                        Launcher.UNKNOWN
-                    },
-                    launcherGameId = it[Games.launcherGameId],
-                    imageUrl = it[Games.imageUrl],
-                    registeredAt = it[Games.registeredAt],
-                    updatedAt = it[Games.updatedAt]
-                )
-            }
+        }.orderBy(Games.title).orderBy(Games.launcherGameId).limit(
+            limit,
+            page.toLong() * limit
+        ).map {
+            Game(
+                title = it[Games.title],
+                launcher = try {
+                    Launcher.valueOf(it[Games.launcher])
+                } catch (exception: IllegalArgumentException) {
+                    Launcher.UNKNOWN
+                },
+                launcherGameId = it[Games.launcherGameId],
+                imageUrl = it[Games.imageUrl],
+                registeredAt = it[Games.registeredAt],
+                updatedAt = it[Games.updatedAt]
+            )
+        }
     }
 
 }

@@ -9,11 +9,12 @@ internal object GamesService {
 
     private val log = logger { }
 
-    fun getGames(limit: Int = 10, titlePart: String? = null, launcher: Launcher? = null) = GetGamesResponse(
-        supportedGamesCount = GamesRepository.countSupportedGames(),
-        games = GamesRepository.getGames(limit, titlePart, launcher),
-        lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
-    )
+    fun getGames(limit: Int = 10, page: Int = 0, titlePart: String? = null, launcher: Launcher? = null) =
+        GetGamesResponse(
+            supportedGamesCount = GamesRepository.countSupportedGames(),
+            games = GamesRepository.getGames(limit, page, titlePart, launcher),
+            lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
+        )
 
     fun updateIfNeeded() {
         doInTransaction {
