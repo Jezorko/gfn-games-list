@@ -143,7 +143,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     private fun updateGamesList() {
         getGames(0).then { response ->
-            setState { getGamesResponse = response }
+            setState { getGamesResponse = response }.then { allowScrollUpdate = true }
         }
     }
 
