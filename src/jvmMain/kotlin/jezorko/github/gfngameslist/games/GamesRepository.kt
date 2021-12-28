@@ -28,8 +28,11 @@ internal object GamesRepository {
 
     internal fun getGames(limit: Int, titlePart: String?) = doInTransaction {
         Games.select {
-            if (titlePart != null) Games.title like "%$titlePart%"
-            else Games.id.isNotNull()
+            (Games.launcher notInList listOf(Launcher.NONE, Launcher.UNKNOWN).map(Launcher::name))
+                .let {
+                    if (titlePart != null) it and (Games.title like "%$titlePart%")
+                    else it
+                }
         }.limit(limit)
             .map {
                 Game(
