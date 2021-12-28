@@ -15,12 +15,7 @@ fun Application.gamesRoutes() = routing {
             null
         } else null
 
-        call.respondJson(provider = {
-            GetGamesResponse(
-                games = GamesService.getGames(limit, titlePart, launcher),
-                lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt()
-            )
-        })
+        call.respondJson(provider = { GamesService.getGames(limit, titlePart, launcher) })
         GamesService.updateIfNeeded()
     }
 }

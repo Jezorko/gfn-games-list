@@ -28,6 +28,10 @@ internal object GamesRepository {
         }
     }
 
+    internal fun countSupportedGames() = doInTransaction {
+        Games.select { Games.launcher notInList unsupportedLaunchers.map(Launcher::name) }.count()
+    }
+
     internal fun getGames(limit: Int, titlePart: String?, launcher: Launcher?) = doInTransaction {
         Games.select {
             (Games.launcher notInList unsupportedLaunchers.map(Launcher::name))

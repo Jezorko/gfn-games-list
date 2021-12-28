@@ -9,10 +9,13 @@ internal object GamesService {
 
     private val log = logger { }
 
-    fun getGames(limit: Int = 10, titlePart: String? = null, launcher: Launcher? = null) =
-        GamesRepository.getGames(limit, titlePart, launcher)
+    fun getGames(limit: Int = 10, titlePart: String? = null, launcher: Launcher? = null) = GetGamesResponse(
+        supportedGamesCount = GamesRepository.countSupportedGames(),
+        games = GamesRepository.getGames(limit, titlePart, launcher),
+        lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
+    )
 
-    suspend fun updateIfNeeded() {
+    fun updateIfNeeded() {
         doInTransaction {
             val timestampNow = currentTimeMillis()
             if (LatestUpdatesRepository.shouldUpdate()) {

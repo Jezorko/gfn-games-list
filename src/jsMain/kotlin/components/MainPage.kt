@@ -5,6 +5,7 @@ import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.Launcher
 import jezorko.github.gfngameslist.games.validLaunchers
 import jezorko.github.gfngameslist.localization.Messages
+import jezorko.github.gfngameslist.localization.get
 import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
@@ -19,6 +20,7 @@ import react.dom.attrs
 import react.dom.option
 import shared.setState
 import shared.targetValue
+import styled.styledDiv
 import styled.styledInput
 import styled.styledSelect
 import kotlin.reflect.KMutableProperty1
@@ -40,6 +42,9 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     override fun RBuilder.render() {
+        styledDiv {
+            +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0L]
+        }
         styledSelect {
             +Language.ENGLISH.readableName
             Language.values().forEach { language -> option { +language.readableName } }

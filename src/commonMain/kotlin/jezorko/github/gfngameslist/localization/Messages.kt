@@ -11,7 +11,10 @@ data class Messages(
     val availableOnPlatform: String
 )
 
-operator fun Messages?.get(prop: KProperty1<Messages, String>): String {
+operator fun Messages?.get(prop: KProperty1<Messages, String>, vararg positionalParameters: Any): String {
     return if (this == null) "?"
-    else prop.get(this)
+    else positionalParameters.map(Any::toString)
+        .foldIndexed(prop.get(this)) { index, currentValue, parameter ->
+            currentValue.replace("\$${index + 1}", parameter)
+        }
 }
