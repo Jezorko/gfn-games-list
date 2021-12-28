@@ -33,7 +33,7 @@ internal object GamesRepository {
                     if (titlePart != null) it and (Games.title like "%$titlePart%")
                     else it
                 }
-        }.limit(limit)
+        }.orderBy(Games.title).limit(limit)
             .map {
                 Game(
                     title = it[Games.title],

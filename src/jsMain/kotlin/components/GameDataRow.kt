@@ -1,5 +1,6 @@
 package components
 
+import jezorko.github.gfngameslist.games.Game
 import kotlinx.html.id
 import react.Props
 import react.RBuilder
@@ -10,8 +11,7 @@ import styled.*
 
 external interface GameDataRowProps : Props {
     var id: Int
-    var imageUrl: String
-    var gameTitle: String
+    var game: Game
 }
 
 class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>(props) {
@@ -30,7 +30,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 }
                 styledImg {
                     attrs {
-                        src = props.imageUrl
+                        src = props.game.imageUrl
                     }
                 }
             }
@@ -39,7 +39,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                     +GameDataRowStyles.tableData
                 }
                 styledDiv {
-                    +props.gameTitle
+                    +props.game.title
                 }
             }
         }
