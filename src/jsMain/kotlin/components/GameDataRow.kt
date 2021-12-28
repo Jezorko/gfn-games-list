@@ -1,6 +1,7 @@
 package components
 
 import jezorko.github.gfngameslist.games.Game
+import jezorko.github.gfngameslist.games.GameStatus
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLImageElement
@@ -21,7 +22,14 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
     override fun RBuilder.render() {
         styledTr {
             attrs { id = "gameDataRow${props.id}" }
-            css { +GameDataRowStyles.tableRow }
+            css {
+                +when (props.game.status) {
+                    GameStatus.AVAILABLE -> GameDataRowStyles.tableRowAvailable
+                    GameStatus.MAINTENANCE -> GameDataRowStyles.tableRowMaintenance
+                    GameStatus.PATCHING -> GameDataRowStyles.tableRowPatching
+                    else -> GameDataRowStyles.tableRowUnknown
+                }
+            }
             styledTd {
                 css { +GameDataRowStyles.tableData }
                 styledImg {
