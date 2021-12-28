@@ -15,12 +15,9 @@ import kotlinx.html.*
 
 fun HTML.index() {
     head {
-        title("Hello from Ktor!")
+        title("GeForce NOW Supported Games List")
     }
     body {
-        div {
-            +"Hello from Ktor"
-        }
         div {
             id = "root"
         }
