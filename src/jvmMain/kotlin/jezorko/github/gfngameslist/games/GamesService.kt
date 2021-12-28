@@ -60,7 +60,8 @@ internal object GamesService {
                                     }
                                     GameStatus.UNKNOWN
                                 },
-                                publisher = supportedGame.publisher
+                                publisher = supportedGame.publisher,
+                                storeUrl = supportedGame.storeUrl
                             )
                         }
                         .forEach(GamesRepository::putGame)

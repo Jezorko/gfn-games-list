@@ -23,5 +23,6 @@ data class Game(
     val registeredAt: Long,
     val updatedAt: Long,
     val status: GameStatus,
-    val publisher: String
+    val publisher: String,
+    val storeUrl: String
 )

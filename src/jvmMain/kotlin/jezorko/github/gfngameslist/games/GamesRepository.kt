@@ -27,6 +27,7 @@ internal object GamesRepository {
             updatedValue[updatedAt] = game.updatedAt
             updatedValue[status] = game.status.name
             updatedValue[publisher] = game.publisher
+            updatedValue[storeUrl] = game.storeUrl
         }
     }
 
@@ -64,7 +65,8 @@ internal object GamesRepository {
                     } catch (exception: IllegalArgumentException) {
                         GameStatus.UNKNOWN
                     },
-                    publisher = it[Games.publisher]
+                    publisher = it[Games.publisher],
+                    storeUrl = it[Games.storeUrl]
                 )
             }
         }

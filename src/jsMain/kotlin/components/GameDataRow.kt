@@ -61,9 +61,25 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 css { +GameDataRowStyles.tableData }
                 styledDiv { +props.game.publisher }
             }
-            styledTd {
-                css { +GameDataRowStyles.tableData }
-                styledDiv { +props.game.store.toString() }
+
+            val buildStoreElement: StyledDOMBuilder<*>.() -> Unit = {
+                styledTd {
+                    css { +GameDataRowStyles.tableData }
+                    styledDiv { +props.game.store.toString() }
+                }
+            }
+            props.game.storeUrl.let {
+                if (it.isNotBlank()) {
+                    styledA {
+                        this.buildStoreElement()
+                        attrs {
+                            href = props.game.storeUrl
+                            target = "_blank"
+                        }
+                    }
+                } else {
+                    this.buildStoreElement()
+                }
             }
         }
     }

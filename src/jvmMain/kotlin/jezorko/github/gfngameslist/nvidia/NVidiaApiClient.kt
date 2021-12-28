@@ -1,15 +1,12 @@
 package jezorko.github.gfngameslist.nvidia
 
 import com.fasterxml.jackson.core.type.TypeReference
-import jezorko.github.gfngameslist.games.GameStatus
 import jezorko.github.gfngameslist.shared.httpClient
 import jezorko.github.gfngameslist.shared.parseJson
 import mu.KotlinLogging.logger
 import java.net.URI
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-
-
 
 
 data class SupportedGame(
@@ -24,6 +21,10 @@ data class SupportedGame(
     val status: String,
     val imageUrl: String = when (store) {
         "Steam" -> "https://cdn.cloudflare.steamstatic.com/steam/apps/${steamUrl.split('/').last()}/header.jpg"
+        else -> ""
+    },
+    val storeUrl: String = when (store) {
+        "Steam" -> steamUrl
         else -> ""
     }
 )
