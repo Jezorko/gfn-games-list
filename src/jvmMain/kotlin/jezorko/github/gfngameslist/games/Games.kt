@@ -11,5 +11,6 @@ internal object Games : LongIdTable() {
     val registeredAt = long("registered_at").default(-1)
     val updatedAt = long("updated_at")
     val status = varchar("status", 255)
+    val publisher = varchar("publisher", 255)
 
 }

@@ -22,5 +22,6 @@ data class Game(
     val imageUrl: String,
     val registeredAt: Long,
     val updatedAt: Long,
-    val status: GameStatus
+    val status: GameStatus,
+    val publisher: String
 )

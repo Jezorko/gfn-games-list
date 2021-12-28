@@ -53,6 +53,10 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 css { +GameDataRowStyles.tableData }
                 styledDiv { +props.game.store.toString() }
             }
+            styledTd {
+                css { +GameDataRowStyles.tableData }
+                styledDiv { +props.game.publisher }
+            }
         }
     }
 }

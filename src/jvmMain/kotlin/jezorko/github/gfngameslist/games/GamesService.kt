@@ -11,10 +11,16 @@ internal object GamesService {
     private val log = logger { }
     private val updateOngoing = AtomicBoolean(false)
 
-    fun getGames(limit: Int = 10, page: Int = 0, titlePart: String? = null, store: Store? = null) =
+    fun getGames(
+        limit: Int = 10,
+        page: Int = 0,
+        titlePart: String? = null,
+        store: Store? = null,
+        publisherPart: String? = null
+    ) =
         GetGamesResponse(
             supportedGamesCount = GamesRepository.countSupportedGames(),
-            games = GamesRepository.getGames(limit, page, titlePart, store),
+            games = GamesRepository.getGames(limit, page, titlePart, store, publisherPart),
             lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
         )
 
@@ -53,7 +59,8 @@ internal object GamesService {
                                         "received unsupported ${supportedGame::status.name} value ${supportedGame.status} for game ${supportedGame.title}"
                                     }
                                     GameStatus.UNKNOWN
-                                }
+                                },
+                                publisher = supportedGame.publisher
                             )
                         }
                         .forEach(GamesRepository::putGame)

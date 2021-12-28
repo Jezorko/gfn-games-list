@@ -26,6 +26,7 @@ internal object GamesRepository {
             updatedValue[registeredAt] = if (registrationTime == -1L) game.registeredAt else registrationTime
             updatedValue[updatedAt] = game.updatedAt
             updatedValue[status] = game.status.name
+            updatedValue[publisher] = game.publisher
         }
     }
 
@@ -35,34 +36,37 @@ internal object GamesRepository {
             .count()
     }
 
-    internal fun getGames(limit: Int, page: Int, titlePart: String?, store: Store?) = doInTransaction {
-        Games.select {
-            (Games.launcher notInList unsupportedStores.map(Store::name))
-                .optionalAnd(titlePart) { Games.title.upperCase() like "%${it.uppercase()}%" }
-                .optionalAnd(store) { Games.launcher eq it.name }
-        }.orderBy(Games.title).orderBy(Games.launcherGameId).limit(
-            limit,
-            page.toLong() * limit
-        ).map {
-            Game(
-                id = it[Games.id].value,
-                title = it[Games.title],
-                store = try {
-                    Store.valueOf(it[Games.launcher])
-                } catch (exception: IllegalArgumentException) {
-                    Store.UNKNOWN
-                },
-                launcherGameId = it[Games.launcherGameId],
-                imageUrl = it[Games.imageUrl],
-                registeredAt = it[Games.registeredAt],
-                updatedAt = it[Games.updatedAt],
-                status = try {
-                    GameStatus.valueOf(it[Games.status])
-                } catch (exception: IllegalArgumentException) {
-                    GameStatus.UNKNOWN
-                }
-            )
+    internal fun getGames(limit: Int, page: Int, titlePart: String?, store: Store?, publisherPart: String?) =
+        doInTransaction {
+            Games.select {
+                (Games.launcher notInList unsupportedStores.map(Store::name))
+                    .optionalAnd(titlePart) { Games.title.upperCase() like "%${it.uppercase()}%" }
+                    .optionalAnd(store) { Games.launcher eq it.name }
+                    .optionalAnd(publisherPart) { Games.publisher.upperCase() like "%${it.uppercase()}%" }
+            }.orderBy(Games.title).orderBy(Games.launcherGameId).limit(
+                limit,
+                page.toLong() * limit
+            ).map {
+                Game(
+                    id = it[Games.id].value,
+                    title = it[Games.title],
+                    store = try {
+                        Store.valueOf(it[Games.launcher])
+                    } catch (exception: IllegalArgumentException) {
+                        Store.UNKNOWN
+                    },
+                    launcherGameId = it[Games.launcherGameId],
+                    imageUrl = it[Games.imageUrl],
+                    registeredAt = it[Games.registeredAt],
+                    updatedAt = it[Games.updatedAt],
+                    status = try {
+                        GameStatus.valueOf(it[Games.status])
+                    } catch (exception: IllegalArgumentException) {
+                        GameStatus.UNKNOWN
+                    },
+                    publisher = it[Games.publisher]
+                )
+            }
         }
-    }
 
 }

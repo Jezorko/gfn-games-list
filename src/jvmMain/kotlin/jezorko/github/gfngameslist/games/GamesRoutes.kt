@@ -15,8 +15,9 @@ fun Application.gamesRoutes() = routing {
         } catch (exception: IllegalArgumentException) {
             null
         } else null
+        val publisherPart = call.request.queryParameters["publisher"]
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store) })
+        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart) })
         GamesService.updateIfNeeded()
     }
 }

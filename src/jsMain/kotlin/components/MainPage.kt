@@ -38,6 +38,7 @@ external interface MainPageState : State {
     var titleSearch: String?
     var storeSearch: Store?
     var getGamesResponse: GetGamesResponse?
+    var publisherSearch: String?
 }
 
 class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
@@ -66,6 +67,12 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             attrs {
                 id = "game-title-search"
                 onChangeFunction = updateState(MainPageState::titleSearch)
+            }
+        }
+        styledInput(type = InputType.text) {
+            attrs {
+                id = "game-publisher-search"
+                onChangeFunction = updateState(MainPageState::publisherSearch)
             }
         }
         styledSelect {
@@ -103,12 +110,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         ) {
             allowScrollUpdate = false
             setState { searchPage = searchPage?.plus(1) ?: 1 }.then {
-                ApiClient.getGames(
-                    state.limitSearch ?: 10,
-                    it.searchPage!!,
-                    state.titleSearch,
-                    state.storeSearch
-                ).then { response ->
+                getGames(it.searchPage!!).then { response ->
                     setState {
                         getGamesResponse = getGamesResponse?.copy(
                             games = getGamesResponse?.games?.plus(response.games) ?: response.games
@@ -132,10 +134,9 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     private fun updateGamesList() {
-        ApiClient.getGames(state.limitSearch ?: 10, 0, state.titleSearch, state.storeSearch)
-            .then { response ->
-                setState { getGamesResponse = response }
-            }
+        getGames(0).then { response ->
+            setState { getGamesResponse = response }
+        }
     }
 
     private fun updateMessages() {
@@ -143,5 +144,8 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             setState { messages = response }
         }
     }
+
+    private fun getGames(page: Int) =
+        ApiClient.getGames(state.limitSearch ?: 10, page, state.titleSearch, state.storeSearch, state.publisherSearch)
 
 }
