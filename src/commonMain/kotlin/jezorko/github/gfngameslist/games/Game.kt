@@ -2,11 +2,15 @@ package jezorko.github.gfngameslist.games
 
 import kotlinx.serialization.Serializable
 
-enum class Store {
-    STEAM, EPIC, ORIGIN, UPLAY, UBISOFT_CONNECT, GOG, NONE, UNKNOWN;
+enum class GameStatus {
+    AVAILABLE, MAINTENANCE, PATCHING, UNKNOWN
 }
 
-val unsupportedStores = setOf(Store.UNKNOWN, Store.NONE)
+enum class Store {
+    STEAM, EPIC, ORIGIN, UBISOFT_CONNECT, GOG, UNKNOWN;
+}
+
+val unsupportedStores = setOf(Store.UNKNOWN)
 val validStores = Store.values().toSet() - unsupportedStores
 
 @Serializable
@@ -17,5 +21,6 @@ data class Game(
     val launcherGameId: Long,
     val imageUrl: String,
     val registeredAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val status: GameStatus
 )

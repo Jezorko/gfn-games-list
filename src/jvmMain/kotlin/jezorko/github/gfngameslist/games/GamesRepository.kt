@@ -18,12 +18,14 @@ internal object GamesRepository {
             Games.id eq game.id
         }) { existingValue, updatedValue ->
             val registrationTime = existingValue?.get(registeredAt) ?: -1
+            updatedValue[id] = game.id
             updatedValue[launcherGameId] = game.launcherGameId
-            updatedValue[launcher] = game.store.toString()
+            updatedValue[launcher] = game.store.name
             updatedValue[title] = game.title
             updatedValue[imageUrl] = game.imageUrl
             updatedValue[registeredAt] = if (registrationTime == -1L) game.registeredAt else registrationTime
             updatedValue[updatedAt] = game.updatedAt
+            updatedValue[status] = game.status.name
         }
     }
 
@@ -53,7 +55,12 @@ internal object GamesRepository {
                 launcherGameId = it[Games.launcherGameId],
                 imageUrl = it[Games.imageUrl],
                 registeredAt = it[Games.registeredAt],
-                updatedAt = it[Games.updatedAt]
+                updatedAt = it[Games.updatedAt],
+                status = try {
+                    GameStatus.valueOf(it[Games.status])
+                } catch (exception: IllegalArgumentException) {
+                    GameStatus.UNKNOWN
+                }
             )
         }
     }

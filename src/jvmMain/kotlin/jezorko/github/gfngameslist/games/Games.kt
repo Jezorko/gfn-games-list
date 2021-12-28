@@ -10,5 +10,6 @@ internal object Games : LongIdTable() {
     val imageUrl = varchar("image_url", 255)
     val registeredAt = long("registered_at").default(-1)
     val updatedAt = long("updated_at")
+    val status = varchar("status", 255)
 
 }
