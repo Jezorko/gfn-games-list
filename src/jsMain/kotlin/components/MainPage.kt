@@ -4,11 +4,12 @@ import api.ApiClient
 import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.Launcher
 import jezorko.github.gfngameslist.games.validLaunchers
+import jezorko.github.gfngameslist.localization.Messages
 import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLSelectElement
+import localization.Language
+import localization.languageFromReadableName
 import org.w3c.dom.events.Event
 import react.Props
 import react.RBuilder
@@ -17,11 +18,14 @@ import react.State
 import react.dom.attrs
 import react.dom.option
 import shared.setState
+import shared.targetValue
 import styled.styledInput
 import styled.styledSelect
 import kotlin.reflect.KMutableProperty1
 
 external interface MainPageState : State {
+    var language: Language?
+    var messages: Messages?
     var limitSearch: Int?
     var titleSearch: String?
     var launcherSearch: Launcher?
@@ -30,13 +34,26 @@ external interface MainPageState : State {
 
 class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
-    override fun componentDidMount() = updateGamesList()
+    override fun componentDidMount() {
+        updateGamesList()
+        updateMessages()
+    }
 
     override fun RBuilder.render() {
+        styledSelect {
+            +Language.ENGLISH.readableName
+            Language.values().forEach { language -> option { +language.readableName } }
+            attrs {
+                id = "language-select"
+                onChangeFunction = {
+                    setState { language = languageFromReadableName(it.targetValue()) }.then { updateMessages() }
+                }
+            }
+        }
         styledInput(type = InputType.text) {
             attrs {
                 id = "game-title-search"
-                onChangeFunction = updateSearchParam(MainPageState::titleSearch)
+                onChangeFunction = updateState(MainPageState::titleSearch)
             }
         }
         styledSelect {
@@ -57,22 +74,16 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             child(GameDataTable::class) {
                 attrs {
                     this.games = games
+                    this.messages = state.messages
                 }
             }
         }
     }
 
-    private fun updateSearchParam(prop: KMutableProperty1<MainPageState, String?>) = updateSearchParam(prop) { it }
+    private fun updateState(prop: KMutableProperty1<MainPageState, String?>) = updateSearchParam(prop) { it }
     private fun <T> updateSearchParam(prop: KMutableProperty1<MainPageState, T>, valueGetter: (String?) -> T)
             : (Event) -> Unit = { event: Event ->
-        val target = event.target!!
-        val newValue = valueGetter(
-            when (target) {
-                is HTMLInputElement -> target.value
-                is HTMLSelectElement -> target.value
-                else -> throw IllegalStateException("target ${target::class.simpleName} not supported")
-            }
-        )
+        val newValue = valueGetter(event.targetValue())
         setState { prop.set(this, newValue) }.then { updateGamesList() }
     }
 
@@ -81,6 +92,12 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             .then { response ->
                 setState { getGamesResponse = response }
             }
+    }
+
+    private fun updateMessages() {
+        ApiClient.getMessages(state.language ?: Language.ENGLISH).then { response ->
+            setState { messages = response }
+        }
     }
 
 }

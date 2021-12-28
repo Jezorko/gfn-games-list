@@ -1,6 +1,8 @@
 package components
 
 import jezorko.github.gfngameslist.games.Game
+import jezorko.github.gfngameslist.localization.Messages
+import jezorko.github.gfngameslist.localization.get
 import react.Props
 import react.RBuilder
 import react.RComponent
@@ -11,6 +13,7 @@ import styled.styledTh
 import styled.styledTr
 
 external interface GameDataTableProps : Props {
+    var messages: Messages?
     var games: List<Game>
 }
 
@@ -20,9 +23,9 @@ class GameDataTable(props: GameDataTableProps) : RComponent<GameDataTableProps, 
         styledTable {
             styledTbody {
                 styledTr {
-                    styledTh { +"image" }
-                    styledTh { +"title" }
-                    styledTh { +"available on" }
+                    styledTh { +props.messages[Messages::gameImage] }
+                    styledTh { +props.messages[Messages::gameTitle] }
+                    styledTh { +props.messages[Messages::availableOnPlatform] }
                 }
                 props.games.forEachIndexed { index, game ->
                     child(GameDataRow::class) {

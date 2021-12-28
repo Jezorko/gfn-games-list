@@ -5,24 +5,25 @@ import jezorko.github.gfngameslist.games.Launcher
 import jezorko.github.gfngameslist.localization.Messages
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
+import localization.Language
 import org.w3c.fetch.RequestInit
 import shared.flatThen
 import shared.json
 import kotlin.js.Promise
 
-val localizationMessagesCache = mutableMapOf<String, Promise<Messages?>>()
+val localizationMessagesCache = mutableMapOf<Language, Promise<Messages?>>()
 
 external fun encodeURIComponent(str: String): String
 
 object ApiClient {
 
-    fun getMessages(languageTag: String) = localizationMessagesCache.getOrPut(languageTag) {
-        window.fetch("/api/messages/$languageTag", object : RequestInit {
+    fun getMessages(language: Language) = localizationMessagesCache.getOrPut(language) {
+        window.fetch("/api/messages/${language.tag}", object : RequestInit {
             override var method: String? = "GET"
         }).flatThen { response ->
             if (response.status == 200.toShort()) {
                 response.text().then { responseBodyAsText ->
-                    json.decodeFromString<Messages>(responseBodyAsText)
+                    json.decodeFromString(responseBodyAsText)
                 }
             } else {
                 Promise.resolve(null as Messages?)
