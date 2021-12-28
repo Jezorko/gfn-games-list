@@ -1,12 +1,7 @@
 package jezorko.github.gfngameslist.games
 
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
-
 enum class Launcher {
-    STEAM, EPIC, ORIGIN, NONE, UPLAY,
-
-    @JsonEnumDefaultValue
-    UNKNOWN;
+    STEAM, EPIC, ORIGIN, NONE, UPLAY, UNKNOWN;
 }
 
 data class Game(

@@ -20,7 +20,12 @@ internal object GamesService {
                     .map { supportedGame ->
                         Game(
                             title = supportedGame.name,
-                            launcher = supportedGame.launcher,
+                            launcher = try {
+                                Launcher.valueOf(supportedGame.launcher)
+                            } catch (exception: IllegalArgumentException) {
+                                log.warn { "received unsupported ${supportedGame::launcher.name} value ${supportedGame.launcher}" }
+                                Launcher.UNKNOWN
+                            },
                             launcherGameId = supportedGame.launcherGameId,
                             imageUrl = supportedGame.imageUrl,
                             registeredAt = timestampNow,

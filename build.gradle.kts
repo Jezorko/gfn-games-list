@@ -53,7 +53,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
                 implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-                implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
                 implementation("org.postgresql:postgresql:42.3.1")
                 implementation("org.testcontainers:testcontainers:$testContainersVersion")
                 implementation("org.testcontainers:postgresql:$testContainersVersion")

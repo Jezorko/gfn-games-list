@@ -1,7 +1,6 @@
 package jezorko.github.gfngameslist.nvidia
 
 import com.fasterxml.jackson.core.type.TypeReference
-import jezorko.github.gfngameslist.games.Launcher
 import jezorko.github.gfngameslist.shared.httpClient
 import jezorko.github.gfngameslist.shared.parseJson
 import mu.KotlinLogging.logger
@@ -9,18 +8,12 @@ import java.net.URI
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-private val log = logger { }
-
 data class SupportedGame(
     val name: String,
-    val launcher: Launcher,
+    val launcher: String,
     val launcherGameId: String,
     val imageUrl: String
-) {
-    init {
-        if (launcher == Launcher.UNKNOWN) log.warn { "unknown ${SupportedGame::launcher.name} value for $this" }
-    }
-}
+)
 
 object NVidiaApiClient {
 
