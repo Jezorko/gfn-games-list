@@ -68,4 +68,11 @@ object Database {
         }
     }
 
+    fun <T : Table> T.insertIfNotExists(
+        where: SqlExpressionBuilder.() -> Op<Boolean>,
+        insert: T.(UpdateBuilder<Any>) -> Unit
+    ): ResultRow {
+        return select(where).limit(1).firstOrNull() ?: insert { this.insert(it) }.resultedValues!!.first()
+    }
+
 }
