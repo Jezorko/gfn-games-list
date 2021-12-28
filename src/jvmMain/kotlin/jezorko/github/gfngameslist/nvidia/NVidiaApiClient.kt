@@ -8,22 +8,35 @@ import java.net.URI
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
+
+enum class GameStatus {
+    AVAILABLE, MAINTENANCE
+}
+
 data class SupportedGame(
-    val name: String,
-    val launcher: String,
-    val launcherGameId: String,
-    val imageUrl: String
+    val id: Long,
+    val title: String,
+    val sortName: String,
+    val isFullyOptimized: Boolean,
+    val steamUrl: String,
+    val store: String,
+    val publisher: String,
+    val genres: Set<String>,
+    val status: GameStatus,
+    val imageUrl: String = when (store) {
+        "Steam" -> "https://cdn.cloudflare.steamstatic.com/steam/apps/${steamUrl.split('/').last()}/header.jpg"
+        else -> ""
+    }
 )
 
 object NVidiaApiClient {
 
     private val log = logger {}
-    private const val baseUrl = "https://gfn.nvidia.com/api/1"
 
-    fun fetchSupportedGamesList(): List<SupportedGame>? {
+    fun fetchSupportedGamesList(languageTag: String = "en-US"): List<SupportedGame>? {
         val response = httpClient.send(
             HttpRequest.newBuilder()
-                .uri(URI.create("${baseUrl}/products/gfn/games"))
+                .uri(URI.create(getGamesUrl()))
                 .build(),
             HttpResponse.BodyHandlers.ofString()
         )
@@ -37,5 +50,8 @@ object NVidiaApiClient {
             null
         }
     }
+
+    private fun getGamesUrl(languageTag: String = "en-US") =
+        "https://static.nvidiagrid.net/supported-public-game-list/locales/gfnpc-${languageTag}.json"
 
 }

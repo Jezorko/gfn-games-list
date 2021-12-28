@@ -1,7 +1,7 @@
 package api
 
 import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.Launcher
+import jezorko.github.gfngameslist.games.Store
 import jezorko.github.gfngameslist.localization.Messages
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
@@ -35,10 +35,10 @@ object ApiClient {
         limit: Int = 10,
         page: Int = 0,
         titlePart: String? = null,
-        launcher: Launcher?
+        store: Store?
     ): Promise<GetGamesResponse> {
         val titlePartParam = if (titlePart != null) "&title=${encodeURIComponent(titlePart)}" else ""
-        val launcherParam = if (launcher != null) "&launcher=${launcher.name}" else ""
+        val launcherParam = if (store != null) "&store=${store.name}" else ""
         return window.fetch(
             "/api/games?limit=$limit&page=$page$titlePartParam$launcherParam",
             object : RequestInit {

@@ -14,7 +14,7 @@ object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {
     }
 
     val gameImage by css {
-        maxWidth = LinearDimension("10%")
-        maxHeight = LinearDimension("10%")
+        maxWidth = LinearDimension("50%")
+        maxHeight = LinearDimension("50%")
     }
 } 

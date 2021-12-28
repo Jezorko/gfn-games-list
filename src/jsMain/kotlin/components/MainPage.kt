@@ -2,8 +2,8 @@ package components
 
 import api.ApiClient
 import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.Launcher
-import jezorko.github.gfngameslist.games.validLaunchers
+import jezorko.github.gfngameslist.games.Store
+import jezorko.github.gfngameslist.games.validStores
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
 import kotlinx.browser.document
@@ -28,7 +28,7 @@ import styled.styledInput
 import styled.styledSelect
 import kotlin.reflect.KMutableProperty1
 
-var updatingOnScroll = false
+var allowScrollUpdate = true
 
 external interface MainPageState : State {
     var language: Language?
@@ -36,7 +36,7 @@ external interface MainPageState : State {
     var limitSearch: Int?
     var searchPage: Int?
     var titleSearch: String?
-    var launcherSearch: Launcher?
+    var storeSearch: Store?
     var getGamesResponse: GetGamesResponse?
 }
 
@@ -45,6 +45,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     override fun componentDidMount() {
         updateGamesList()
         updateMessages()
+        infiniteScroll()
     }
 
     override fun RBuilder.render() {
@@ -69,14 +70,14 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         }
         styledSelect {
             option { +"" }
-            validLaunchers.forEach { validLauncher -> option { +validLauncher.name } }
+            validStores.forEach { validLauncher -> option { +validLauncher.name } }
             attrs {
                 id = "launcher-search"
-                onChangeFunction = updateSearchParam(MainPageState::launcherSearch) {
+                onChangeFunction = updateSearchParam(MainPageState::storeSearch) {
                     if (it == null || it.isEmpty()) {
                         null
                     } else {
-                        Launcher.valueOf(it)
+                        Store.valueOf(it)
                     }
                 }
             }
@@ -90,32 +91,37 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         window.addEventListener("scroll", object : EventListener {
-            override fun handleEvent(event: Event) {
-                if (
-                    window.scrollY + window.innerHeight
-                    >= (document.body?.offsetHeight?.minus(500) ?: Int.MAX_VALUE)
-                    && !updatingOnScroll
-                ) {
-                    updatingOnScroll = true
-                    setState { searchPage = searchPage?.plus(1) ?: 1 }.then {
-                        ApiClient.getGames(
-                            state.limitSearch ?: 10,
-                            it.searchPage!!,
-                            state.titleSearch,
-                            state.launcherSearch
-                        ).then { response ->
-                            setState {
-                                getGamesResponse = getGamesResponse?.copy(
-                                    games = getGamesResponse?.games?.plus(response.games) ?: response.games
-                                ) ?: response
-                            }.then {
-                                updatingOnScroll = false
-                            }
+            override fun handleEvent(event: Event) = infiniteScroll()
+        })
+    }
+
+    private fun infiniteScroll() {
+        if (
+            window.scrollY + window.innerHeight
+            >= (document.body?.offsetHeight?.minus(500) ?: Int.MAX_VALUE)
+            && allowScrollUpdate
+        ) {
+            allowScrollUpdate = false
+            setState { searchPage = searchPage?.plus(1) ?: 1 }.then {
+                ApiClient.getGames(
+                    state.limitSearch ?: 10,
+                    it.searchPage!!,
+                    state.titleSearch,
+                    state.storeSearch
+                ).then { response ->
+                    setState {
+                        getGamesResponse = getGamesResponse?.copy(
+                            games = getGamesResponse?.games?.plus(response.games) ?: response.games
+                        ) ?: response
+                    }.then {
+                        if (response.games.isNotEmpty()) {
+                            allowScrollUpdate = true
+                            infiniteScroll() // in case if we haven't filled entire screen
                         }
                     }
                 }
             }
-        })
+        }
     }
 
     private fun updateState(prop: KMutableProperty1<MainPageState, String?>) = updateSearchParam(prop) { it }
@@ -126,7 +132,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     private fun updateGamesList() {
-        ApiClient.getGames(state.limitSearch ?: 10, 0, state.titleSearch, state.launcherSearch)
+        ApiClient.getGames(state.limitSearch ?: 10, 0, state.titleSearch, state.storeSearch)
             .then { response ->
                 setState { getGamesResponse = response }
             }

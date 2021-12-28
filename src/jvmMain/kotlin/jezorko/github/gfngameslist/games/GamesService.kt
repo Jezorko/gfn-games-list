@@ -9,10 +9,10 @@ internal object GamesService {
 
     private val log = logger { }
 
-    fun getGames(limit: Int = 10, page: Int = 0, titlePart: String? = null, launcher: Launcher? = null) =
+    fun getGames(limit: Int = 10, page: Int = 0, titlePart: String? = null, store: Store? = null) =
         GetGamesResponse(
             supportedGamesCount = GamesRepository.countSupportedGames(),
-            games = GamesRepository.getGames(limit, page, titlePart, launcher),
+            games = GamesRepository.getGames(limit, page, titlePart, store),
             lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
         )
 
@@ -24,14 +24,17 @@ internal object GamesService {
                 (NVidiaApiClient.fetchSupportedGamesList() ?: emptyList())
                     .map { supportedGame ->
                         Game(
-                            title = supportedGame.name,
-                            launcher = try {
-                                Launcher.valueOf(supportedGame.launcher)
+                            id = supportedGame.id,
+                            title = supportedGame.title,
+                            store = try {
+                                Store.valueOf(supportedGame.store.uppercase().replace(' ', '_'))
                             } catch (exception: IllegalArgumentException) {
-                                log.warn { "received unsupported ${supportedGame::launcher.name} value ${supportedGame.launcher}" }
-                                Launcher.UNKNOWN
+                                log.warn {
+                                    "received unsupported ${supportedGame::store.name} value ${supportedGame.store} for game ${supportedGame.title}"
+                                }
+                                Store.UNKNOWN
                             },
-                            launcherGameId = supportedGame.launcherGameId,
+                            launcherGameId = supportedGame.id,
                             imageUrl = supportedGame.imageUrl,
                             registeredAt = timestampNow,
                             updatedAt = timestampNow

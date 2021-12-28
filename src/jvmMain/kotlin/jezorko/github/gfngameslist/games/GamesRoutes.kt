@@ -9,14 +9,14 @@ fun Application.gamesRoutes() = routing {
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
         val page = call.request.queryParameters["page"]?.toInt() ?: 0
         val titlePart = call.request.queryParameters["title"]
-        val launcherParam = call.request.queryParameters["launcher"]
-        val launcher = if (launcherParam != null) try {
-            Launcher.valueOf(launcherParam)
+        val launcherParam = call.request.queryParameters["store"]
+        val store = if (launcherParam != null) try {
+            Store.valueOf(launcherParam)
         } catch (exception: IllegalArgumentException) {
             null
         } else null
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, launcher) })
+        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store) })
         GamesService.updateIfNeeded()
     }
 }
