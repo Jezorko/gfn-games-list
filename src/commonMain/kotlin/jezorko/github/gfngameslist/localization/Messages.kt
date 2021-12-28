@@ -9,7 +9,8 @@ data class Messages(
     val gameImage: String,
     val gameTitle: String,
     val availableOnPlatform: String,
-    val publisher: String
+    val publisher: String,
+    val endOfGamesList: String
 )
 
 operator fun Messages?.get(prop: KProperty1<Messages, String>, vararg positionalParameters: Any): String {

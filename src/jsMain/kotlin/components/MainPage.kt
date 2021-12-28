@@ -97,6 +97,10 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 }
             }
         }
+        styledDiv {
+            +state.messages[Messages::endOfGamesList]
+        }
+
         window.addEventListener("scroll", object : EventListener {
             override fun handleEvent(event: Event) = infiniteScroll()
         })
@@ -119,6 +123,8 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                         if (response.games.isNotEmpty()) {
                             allowScrollUpdate = true
                             infiniteScroll() // in case if we haven't filled entire screen
+                        } else {
+                            println("reached end of games list!")
                         }
                     }
                 }

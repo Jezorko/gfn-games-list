@@ -3,5 +3,6 @@
   "gameImage": "image",
   "gameTitle": "title",
   "availableOnPlatform": "available on",
-  "publisher": "publisher"
+  "publisher": "publisher",
+  "endOfGamesList": "that's it, folks!"
 }

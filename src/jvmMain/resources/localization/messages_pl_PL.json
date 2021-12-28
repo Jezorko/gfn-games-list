@@ -3,5 +3,6 @@
   "gameImage": "okładka",
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
-  "publisher": "wydawca"
+  "publisher": "wydawca",
+  "endOfGamesList": "wincyj ni ma!"
 }
