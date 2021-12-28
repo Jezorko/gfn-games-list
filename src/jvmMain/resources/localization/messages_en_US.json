@@ -4,5 +4,7 @@
   "gameTitle": "title",
   "availableOnPlatform": "available on",
   "publisher": "publisher",
-  "endOfGamesList": "that's it, folks!"
+  "endOfGamesList": "that's it, folks!",
+  "searchByTitlePlaceholder": "search by title",
+  "searchByPublisherPlaceholder": "search by publisher"
 }

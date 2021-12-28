@@ -4,5 +4,7 @@
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
   "publisher": "wydawca",
-  "endOfGamesList": "wincyj ni ma!"
+  "endOfGamesList": "wincyj ni ma!",
+  "searchByTitlePlaceholder": "wyszukaj po tytule",
+  "searchByPublisherPlaceholder": "wyszukaj po wydawcy"
 }

@@ -67,12 +67,14 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             attrs {
                 id = "game-title-search"
                 onChangeFunction = updateState(MainPageState::titleSearch)
+                placeholder = state.messages[Messages::searchByTitlePlaceholder]
             }
         }
         styledInput(type = InputType.text) {
             attrs {
                 id = "game-publisher-search"
                 onChangeFunction = updateState(MainPageState::publisherSearch)
+                placeholder = state.messages[Messages::searchByPublisherPlaceholder]
             }
         }
         styledSelect {
