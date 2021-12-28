@@ -59,11 +59,11 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
             }
             styledTd {
                 css { +GameDataRowStyles.tableData }
-                styledDiv { +props.game.store.toString() }
+                styledDiv { +props.game.publisher }
             }
             styledTd {
                 css { +GameDataRowStyles.tableData }
-                styledDiv { +props.game.publisher }
+                styledDiv { +props.game.store.toString() }
             }
         }
     }
