@@ -29,9 +29,11 @@ object LatestUpdatesRepository {
     fun shouldUpdate() = doInTransaction {
         val timestampNow = currentTimeMillis()
         val updateFrequencyMilliseconds = Configuration.UPDATE_FREQUENCY_MILLISECONDS.value
-        val latestTimestamp = LatestUpdates.getValue()?.get(timestamp) ?: INITIAL_TIMESTAMP
+        val latestTimestamp = lastUpdatedAt()
         timestampNow - latestTimestamp > updateFrequencyMilliseconds
     }
+
+    fun lastUpdatedAt() = LatestUpdates.getValue()?.get(timestamp) ?: INITIAL_TIMESTAMP
 
     fun registerUpdateComplete() = doInTransaction {
         LatestUpdates.setValue { it[timestamp] = currentTimeMillis() }

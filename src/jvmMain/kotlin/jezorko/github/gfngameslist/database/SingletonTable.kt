@@ -22,7 +22,7 @@ open class SingletonTable : Table() {
         }
     }
 
-    fun <T : SingletonTable> T.getValue(): ResultRow? = select(selectQuery).firstOrNull()
+    fun <T : SingletonTable> T.getValue(): ResultRow? = doInTransaction { select(selectQuery).firstOrNull() }
 
     fun <T : SingletonTable> T.setValue(insert: T.(UpdateBuilder<Any>) -> Unit) = doInTransaction {
         insertOrUpdate(selectQuery) { updatedValue ->
