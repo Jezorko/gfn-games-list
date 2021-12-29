@@ -4,6 +4,13 @@
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
   "publisher": "wydawca",
+  "status": "status",
+  "specificStatus": {
+    "available": "działa w porządku",
+    "maintenance": "trwają prace konserwacyjne",
+    "patching": "pod naprawą",
+    "unknown": "nieznany"
+  },
   "endOfGamesList": "wincyj ni ma!",
   "searchByTitlePlaceholder": "wyszukaj po tytule",
   "searchByPublisherPlaceholder": "wyszukaj po wydawcy"

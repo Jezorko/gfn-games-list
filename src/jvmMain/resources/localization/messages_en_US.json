@@ -4,6 +4,13 @@
   "gameTitle": "title",
   "availableOnPlatform": "available on",
   "publisher": "publisher",
+  "status": "status",
+  "specificStatus": {
+    "available": "online",
+    "maintenance": "offline (maintenance)",
+    "patching": "offline (pathing)",
+    "unknown": "unknown"
+  },
   "endOfGamesList": "that's it, folks!",
   "searchByTitlePlaceholder": "search by title",
   "searchByPublisherPlaceholder": "search by publisher"

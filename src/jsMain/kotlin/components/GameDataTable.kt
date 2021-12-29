@@ -27,12 +27,14 @@ class GameDataTable(props: GameDataTableProps) : RComponent<GameDataTableProps, 
                     styledTh { +props.messages[Messages::gameTitle] }
                     styledTh { +props.messages[Messages::publisher] }
                     styledTh { +props.messages[Messages::availableOnPlatform] }
+                    styledTh { +props.messages[Messages::status] }
                 }
                 props.games.forEachIndexed { index, game ->
                     child(GameDataRow::class) {
                         attrs {
                             this.id = index
                             this.game = game
+                            this.messages = props.messages
                         }
                     }
                 }

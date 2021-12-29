@@ -2,6 +2,9 @@ package components
 
 import jezorko.github.gfngameslist.games.Game
 import jezorko.github.gfngameslist.games.GameStatus
+import jezorko.github.gfngameslist.localization.GameStatusMessages
+import jezorko.github.gfngameslist.localization.Messages
+import jezorko.github.gfngameslist.localization.get
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLImageElement
@@ -14,6 +17,7 @@ import styled.*
 
 external interface GameDataRowProps : Props {
     var id: Int
+    var messages: Messages?
     var game: Game
 }
 
@@ -79,6 +83,18 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                     }
                 } else {
                     this.buildStoreElement()
+                }
+            }
+
+            styledTd {
+                css { +GameDataRowStyles.tableData }
+                styledDiv {
+                    +when (props.game.status) {
+                        GameStatus.AVAILABLE -> props.messages[Messages::specificStatus, GameStatusMessages::available]
+                        GameStatus.MAINTENANCE -> props.messages[Messages::specificStatus, GameStatusMessages::maintenance]
+                        GameStatus.PATCHING -> props.messages[Messages::specificStatus, GameStatusMessages::patching]
+                        GameStatus.UNKNOWN -> props.messages[Messages::specificStatus, GameStatusMessages::unknown]
+                    }
                 }
             }
         }
