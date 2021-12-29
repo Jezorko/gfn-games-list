@@ -20,11 +20,10 @@ internal object GamesRepository {
                 id = it[Games.id].value,
                 title = it[Games.title],
                 store = try {
-                    Store.valueOf(it[Games.launcher])
+                    Store.valueOf(it[Games.store])
                 } catch (exception: IllegalArgumentException) {
                     Store.UNKNOWN
                 },
-                launcherGameId = it[Games.launcherGameId],
                 imageUrl = it[Games.imageUrl],
                 registeredAt = it[Games.registeredAt],
                 updatedAt = it[Games.updatedAt],
@@ -46,8 +45,7 @@ internal object GamesRepository {
         }) { existingValue, updatedValue ->
             val registrationTime = existingValue?.get(registeredAt) ?: -1
             updatedValue[id] = game.id
-            updatedValue[launcherGameId] = game.launcherGameId
-            updatedValue[launcher] = game.store.name
+            updatedValue[store] = game.store.name
             updatedValue[title] = game.title
             updatedValue[imageUrl] = game.imageUrl
             updatedValue[registeredAt] = if (registrationTime == -1L) game.registeredAt else registrationTime
@@ -60,7 +58,7 @@ internal object GamesRepository {
     }
 
     internal fun countSupportedGames() = doInTransaction {
-        Games.select { Games.launcher notInList unsupportedStores.map(Store::name) }
+        Games.select { Games.store notInList unsupportedStores.map(Store::name) }
             .distinctBy { it[Games.title] }
             .count()
     }

@@ -3,6 +3,7 @@ package components
 import api.ApiClient
 import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.Store
+import jezorko.github.gfngameslist.games.storeFromReadableName
 import jezorko.github.gfngameslist.games.validStores
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
@@ -94,14 +95,14 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         styledSelect {
             css { +MainPageStyles.element }
             option { +"" }
-            validStores.forEach { validLauncher -> option { +validLauncher.name } }
+            validStores.forEach { validStore -> option { +validStore.readableName } }
             attrs {
-                id = "launcher-search"
+                id = "store-search"
                 onChangeFunction = updateSearchParam(MainPageState::storeSearch) {
                     if (it == null || it.isEmpty()) {
                         null
                     } else {
-                        Store.valueOf(it)
+                        storeFromReadableName(it)
                     }
                 }
             }

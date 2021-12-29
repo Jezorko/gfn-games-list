@@ -70,7 +70,6 @@ internal object GamesService {
                                     }
                                     Store.UNKNOWN
                                 },
-                                launcherGameId = supportedGame.id,
                                 imageUrl = supportedGame.imageUrl,
                                 registeredAt = timestampNow,
                                 updatedAt = timestampNow,

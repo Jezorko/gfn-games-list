@@ -73,7 +73,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
             val buildStoreElement: StyledDOMBuilder<*>.() -> Unit = {
                 styledTd {
                     css { +GameDataRowStyles.tableData }
-                    styledDiv { +props.game.store.toString() }
+                    styledDiv { +props.game.store.readableName }
                 }
             }
             props.game.storeUrl.let {

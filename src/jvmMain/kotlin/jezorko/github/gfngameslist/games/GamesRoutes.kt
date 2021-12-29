@@ -9,9 +9,9 @@ fun Application.gamesRoutes() = routing {
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
         val page = call.request.queryParameters["page"]?.toInt() ?: 0
         val titlePart = call.request.queryParameters["title"]
-        val launcherParam = call.request.queryParameters["store"]
-        val store = if (launcherParam != null) try {
-            Store.valueOf(launcherParam)
+        val storeParam = call.request.queryParameters["store"]
+        val store = if (storeParam != null) try {
+            Store.valueOf(storeParam)
         } catch (exception: IllegalArgumentException) {
             null
         } else null

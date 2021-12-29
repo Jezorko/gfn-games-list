@@ -1,9 +1,12 @@
 package localization
 
-enum class Language(val readableName: String, val tag: String) {
+import jezorko.github.gfngameslist.shared.EnumWithReadableName
+import jezorko.github.gfngameslist.shared.fromReadableName
+
+enum class Language(override val readableName: String, val tag: String) : EnumWithReadableName {
     ENGLISH("English", "en-US"),
     POLISH("Polski", "pl-PL")
 }
 
 fun languageFromReadableName(readableName: String?) =
-    Language.values().firstOrNull { it.readableName == readableName } ?: Language.ENGLISH
+    fromReadableName(Language.values(), readableName, Language.ENGLISH)
