@@ -9,6 +9,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import jezorko.github.gfngameslist.database.databaseRoutes
+import jezorko.github.gfngameslist.games.GamesFacade
 import jezorko.github.gfngameslist.games.gamesRoutes
 import jezorko.github.gfngameslist.localization.localizationRoutes
 import jezorko.github.gfngameslist.shared.Configuration
@@ -31,6 +32,8 @@ fun HTML.index() {
 
 fun main() {
     log.info { "admin token is ${Configuration.ADMIN_TOKEN.value}" }
+
+    GamesFacade.updateIfNeeded()
 
     embeddedServer(Netty, port = Configuration.PORT.value) {
         routing {
