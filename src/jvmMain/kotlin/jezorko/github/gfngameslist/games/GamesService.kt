@@ -5,6 +5,9 @@ import jezorko.github.gfngameslist.nvidia.NVidiaApiClient
 import mu.KotlinLogging.logger
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+
+private val localGamesCache = AtomicReference<List<Game>>(emptyList())
 
 internal object GamesService {
 
@@ -20,7 +23,15 @@ internal object GamesService {
     ) =
         GetGamesResponse(
             supportedGamesCount = GamesRepository.countSupportedGames(),
-            games = GamesRepository.getGames(limit, page, titlePart, store, publisherPart),
+            games = localGamesCache.get()
+                .asSequence()
+                .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
+                .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
+                .filter { game -> store?.let { game.store == store } ?: true }
+                .sortedBy(Game::title)
+                .drop(page * limit)
+                .take(limit)
+                .toList(),
             lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
         )
 
@@ -35,7 +46,7 @@ internal object GamesService {
                 val timestampNow = currentTimeMillis()
                 if (LatestUpdatesRepository.shouldUpdate()) {
                     log.info { "games update needed, starting" }
-                    (NVidiaApiClient.fetchSupportedGamesList() ?: emptyList())
+                    val games = (NVidiaApiClient.fetchSupportedGamesList() ?: emptyList())
                         .map { supportedGame ->
                             Game(
                                 id = supportedGame.id,
@@ -63,10 +74,16 @@ internal object GamesService {
                                 publisher = supportedGame.publisher,
                                 storeUrl = supportedGame.storeUrl
                             )
-                        }
-                        .forEach(GamesRepository::putGame)
+                        }.toList()
+                    games.forEach(GamesRepository::putGame)
                     LatestUpdatesRepository.registerUpdateComplete()
+                    localGamesCache.set(games)
                     log.info { "games update complete" }
+                } else if (localGamesCache.get().isEmpty()) {
+                    log.info { "no update needed but local cache is empty, filling in" }
+                    val games = GamesRepository.findAll()
+                    localGamesCache.set(games)
+                    log.info { "local cache filled" }
                 }
             }
         } catch (exception: Exception) {
