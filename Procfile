@@ -1,1 +1,1 @@
-web: ./gradlew run
+web: build/install/gfn-games-list/bin/gfn-games-list
