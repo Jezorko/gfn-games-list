@@ -8,12 +8,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
-private val lastLocalCacheUpdateTimestamp = AtomicLong(0)
-private val localGamesCache = AtomicReference<List<Game>>(emptyList())
-
 internal object GamesService {
 
     private val log = logger { }
+
+    private val lastLocalCacheUpdateTimestamp = AtomicLong(0)
+    private val localGamesCache = AtomicReference<List<Game>>(emptyList())
     private val updateOngoing = AtomicBoolean(false)
 
     fun getGames(
