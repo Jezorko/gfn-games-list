@@ -6,6 +6,8 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
+private const val GENRES_SEPARATOR = ", "
+
 internal object GamesRepository {
 
     init {
@@ -32,7 +34,8 @@ internal object GamesRepository {
                     GameStatus.UNKNOWN
                 },
                 publisher = it[Games.publisher],
-                storeUrl = it[Games.storeUrl]
+                storeUrl = it[Games.storeUrl],
+                genres = it[Games.genres].split(GENRES_SEPARATOR).toSet()
             )
         }
     }
@@ -52,6 +55,7 @@ internal object GamesRepository {
             updatedValue[status] = game.status.name
             updatedValue[publisher] = game.publisher
             updatedValue[storeUrl] = game.storeUrl
+            updatedValue[genres] = game.genres.joinToString(GENRES_SEPARATOR)
         }
     }
 

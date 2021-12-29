@@ -17,11 +17,12 @@ internal object GamesService {
     private val updateOngoing = AtomicBoolean(false)
 
     fun getGames(
-        limit: Int = 10,
-        page: Int = 0,
-        titlePart: String? = null,
-        store: Store? = null,
-        publisherPart: String? = null
+        limit: Int,
+        page: Int,
+        titlePart: String?,
+        store: Store?,
+        publisherPart: String?,
+        genrePart: String?
     ) =
         GetGamesResponse(
             supportedGamesCount = GamesRepository.countSupportedGames(),
@@ -30,6 +31,13 @@ internal object GamesService {
                 .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> store?.let { game.store == store } ?: true }
+                .filter { game ->
+                    genrePart?.let {
+                        game.genres.any { genre ->
+                            genre.uppercase().contains(it.uppercase())
+                        }
+                    } ?: true
+                }
                 .sortedBy(Game::title)
                 .drop(page * limit)
                 .take(limit)
@@ -75,7 +83,8 @@ internal object GamesService {
                                     GameStatus.UNKNOWN
                                 },
                                 publisher = supportedGame.publisher,
-                                storeUrl = supportedGame.storeUrl
+                                storeUrl = supportedGame.storeUrl,
+                                genres = supportedGame.genres
                             )
                         }.toList()
                     games.forEach(GamesRepository::putGame)

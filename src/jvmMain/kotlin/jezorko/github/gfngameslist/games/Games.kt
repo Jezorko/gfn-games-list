@@ -13,5 +13,6 @@ internal object Games : LongIdTable() {
     val status = varchar("status", 255)
     val publisher = varchar("publisher", 255)
     val storeUrl = varchar("store_url", 2048)
+    val genres = varchar("genres", 2048)
 
 }

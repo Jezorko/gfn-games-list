@@ -4,6 +4,7 @@
   "gameTitle": "title",
   "availableOnPlatform": "available on",
   "publisher": "publisher",
+  "genres": "genres",
   "status": "status",
   "specificStatus": {
     "available": "online",
@@ -13,5 +14,6 @@
   },
   "endOfGamesList": "that's it, folks!",
   "searchByTitlePlaceholder": "search by title",
-  "searchByPublisherPlaceholder": "search by publisher"
+  "searchByPublisherPlaceholder": "search by publisher",
+  "searchByGenresPlaceholder": "search by genres"
 }

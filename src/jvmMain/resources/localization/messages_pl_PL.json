@@ -4,6 +4,7 @@
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
   "publisher": "wydawca",
+  "genres": "kategorie",
   "status": "status",
   "specificStatus": {
     "available": "działa w porządku",
@@ -13,5 +14,6 @@
   },
   "endOfGamesList": "wincyj ni ma!",
   "searchByTitlePlaceholder": "wyszukaj po tytule",
-  "searchByPublisherPlaceholder": "wyszukaj po wydawcy"
+  "searchByPublisherPlaceholder": "wyszukaj po wydawcy",
+  "searchByGenresPlaceholder": "search by kategoriach"
 }

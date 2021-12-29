@@ -16,8 +16,9 @@ fun Application.gamesRoutes() = routing {
             null
         } else null
         val publisherPart = call.request.queryParameters["publisher"]
+        val genrePart = call.request.queryParameters["genre"]
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart) })
+        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart, genrePart) })
         GamesService.updateIfNeeded()
     }
 }

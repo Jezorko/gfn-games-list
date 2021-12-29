@@ -37,9 +37,10 @@ external interface MainPageState : State {
     var limitSearch: Int?
     var searchPage: Int?
     var titleSearch: String?
+    var publisherSearch: String?
+    var genresSearch: String?
     var storeSearch: Store?
     var getGamesResponse: GetGamesResponse?
-    var publisherSearch: String?
 }
 
 class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
@@ -80,6 +81,14 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 id = "game-publisher-search"
                 onChangeFunction = updateState(MainPageState::publisherSearch)
                 placeholder = state.messages[Messages::searchByPublisherPlaceholder]
+            }
+        }
+        styledInput(type = InputType.text) {
+            css { +MainPageStyles.element }
+            attrs {
+                id = "game-genres-search"
+                onChangeFunction = updateState(MainPageState::genresSearch)
+                placeholder = state.messages[Messages::searchByGenresPlaceholder]
             }
         }
         styledSelect {
@@ -160,6 +169,13 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     private fun getGames(page: Int) =
-        ApiClient.getGames(state.limitSearch ?: 10, page, state.titleSearch, state.storeSearch, state.publisherSearch)
+        ApiClient.getGames(
+            state.limitSearch ?: 10,
+            page,
+            state.titleSearch,
+            state.storeSearch,
+            state.publisherSearch,
+            state.genresSearch
+        )
 
 }

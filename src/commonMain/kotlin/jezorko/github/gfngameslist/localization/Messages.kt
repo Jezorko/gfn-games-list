@@ -18,11 +18,13 @@ data class Messages(
     val gameTitle: String,
     val availableOnPlatform: String,
     val publisher: String,
+    val genres: String,
     val status: String,
     val specificStatus: GameStatusMessages,
     val endOfGamesList: String,
     val searchByTitlePlaceholder: String,
-    val searchByPublisherPlaceholder: String
+    val searchByPublisherPlaceholder: String,
+    val searchByGenresPlaceholder: String
 )
 
 operator fun <T> Messages?.get(

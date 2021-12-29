@@ -65,6 +65,10 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 css { +GameDataRowStyles.tableData }
                 styledDiv { +props.game.publisher }
             }
+            styledTd {
+                css { +GameDataRowStyles.tableData }
+                styledDiv { +props.game.genres.joinToString(", ") }
+            }
 
             val buildStoreElement: StyledDOMBuilder<*>.() -> Unit = {
                 styledTd {
