@@ -26,8 +26,8 @@ object Configuration {
         Environment::valueOf
     )
 
-    val SERVER_PORT: EnvironmentVariable<Int> = EnvironmentVariable(
-        Configuration::SERVER_PORT,
+    val PORT: EnvironmentVariable<Int> = EnvironmentVariable(
+        Configuration::PORT,
         3000,
         String::toInt
     )

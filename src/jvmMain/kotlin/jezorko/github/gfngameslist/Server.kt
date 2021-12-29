@@ -32,7 +32,7 @@ fun HTML.index() {
 fun main() {
     log.info { "admin token is ${Configuration.ADMIN_TOKEN.value}" }
 
-    embeddedServer(Netty, port = Configuration.SERVER_PORT.value, host = "127.0.0.1") {
+    embeddedServer(Netty, port = Configuration.PORT.value, host = "127.0.0.1") {
         routing {
             get("/") {
                 call.respondHtml(HttpStatusCode.OK, HTML::index)
