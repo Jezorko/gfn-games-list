@@ -25,7 +25,7 @@ internal object GamesService {
         genrePart: String?
     ) =
         GetGamesResponse(
-            supportedGamesCount = GamesRepository.countSupportedGames(),
+            supportedGamesCount = localGamesCache.get().distinctBy(Game::title).count(),
             games = localGamesCache.get()
                 .asSequence()
                 .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
@@ -42,7 +42,7 @@ internal object GamesService {
                 .drop(page * limit)
                 .take(limit)
                 .toList(),
-            lastUpdatedAt = LatestUpdatesRepository.lastUpdatedAt(),
+            lastUpdatedAt = lastLocalCacheUpdateTimestamp.get(),
         )
 
     fun updateIfNeeded() {
