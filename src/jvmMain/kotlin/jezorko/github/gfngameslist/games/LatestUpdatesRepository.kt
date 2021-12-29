@@ -35,8 +35,8 @@ object LatestUpdatesRepository {
 
     fun lastUpdatedAt() = LatestUpdates.getValue()?.get(timestamp) ?: INITIAL_TIMESTAMP
 
-    fun registerUpdateComplete() = doInTransaction {
-        LatestUpdates.setValue { it[timestamp] = currentTimeMillis() }
+    fun registerUpdateComplete(updateTimestamp: Long) = doInTransaction {
+        LatestUpdates.setValue { it[timestamp] = updateTimestamp }
     }
 
 }

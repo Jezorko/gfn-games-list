@@ -5,8 +5,10 @@ import jezorko.github.gfngameslist.nvidia.NVidiaApiClient
 import mu.KotlinLogging.logger
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
+private val lastLocalCacheUpdateTimestamp = AtomicLong(0)
 private val localGamesCache = AtomicReference<List<Game>>(emptyList())
 
 internal object GamesService {
@@ -43,6 +45,7 @@ internal object GamesService {
 
         try {
             doInTransaction {
+                val latestUpdateTimestamp = LatestUpdatesRepository.lastUpdatedAt()
                 val timestampNow = currentTimeMillis()
                 if (LatestUpdatesRepository.shouldUpdate()) {
                     log.info { "games update needed, starting" }
@@ -76,14 +79,19 @@ internal object GamesService {
                             )
                         }.toList()
                     games.forEach(GamesRepository::putGame)
-                    LatestUpdatesRepository.registerUpdateComplete()
+                    LatestUpdatesRepository.registerUpdateComplete(timestampNow)
                     localGamesCache.set(games)
+                    lastLocalCacheUpdateTimestamp.set(timestampNow)
                     log.info { "games update complete" }
-                } else if (localGamesCache.get().isEmpty()) {
-                    log.info { "no update needed but local cache is empty, filling in" }
+                } else if (
+                    localGamesCache.get().isEmpty()
+                    || lastLocalCacheUpdateTimestamp.get() != latestUpdateTimestamp
+                ) {
+                    log.info { "no database update needed but local cache needs updating" }
                     val games = GamesRepository.findAll()
                     localGamesCache.set(games)
-                    log.info { "local cache filled" }
+                    lastLocalCacheUpdateTimestamp.set(latestUpdateTimestamp)
+                    log.info { "local cache updated" }
                 }
             }
         } catch (exception: Exception) {
