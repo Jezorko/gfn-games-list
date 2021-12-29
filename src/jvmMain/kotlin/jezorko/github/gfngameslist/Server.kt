@@ -33,9 +33,8 @@ fun HTML.index() {
 fun main() {
     log.info { "admin token is ${Configuration.ADMIN_TOKEN.value}" }
 
-    GamesFacade.updateIfNeeded()
-
     embeddedServer(Netty, port = Configuration.PORT.value) {
+        GamesFacade.updateIfNeeded()
         routing {
             get("/") {
                 call.respondHtml(HttpStatusCode.OK, HTML::index)
