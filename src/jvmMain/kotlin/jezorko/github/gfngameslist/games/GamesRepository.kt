@@ -2,7 +2,7 @@ package jezorko.github.gfngameslist.games
 
 import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.database.Database.insertOrUpdate
-import org.jetbrains.exposed.sql.SchemaUtils
+import jezorko.github.gfngameslist.database.Database.register
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
@@ -11,7 +11,7 @@ private const val GENRES_SEPARATOR = ", "
 internal object GamesRepository {
 
     init {
-        doInTransaction { SchemaUtils.create(Games) }
+        Games.register()
     }
 
     internal fun findAll() = doInTransaction {

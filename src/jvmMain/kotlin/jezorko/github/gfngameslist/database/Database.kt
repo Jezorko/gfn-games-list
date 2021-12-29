@@ -10,7 +10,6 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
 interface DatabaseConfiguration {
     val jdbcUrl: String
     val username: String
@@ -30,10 +29,29 @@ object Database {
         Environment.LOCAL -> PostgresLocal()
     }
 
-    fun <T> doInTransaction(operation: () -> T) = getConnection().run {
+    private val registeredTables = mutableSetOf<Table>()
+
+    fun <T : Table> T.register() {
+        val table = this
+        registeredTables.add(table)
+        doInTransaction { SchemaUtils.create(table) }
+    }
+
+    fun recreateTables() = doInTransaction {
+        log.info { "recreating tables" }
+        addLogger(sqlLogger)
+        registeredTables.forEach { table ->
+            log.info { "recreating ${table.tableName}" }
+            exec("DROP TABLE IF EXISTS ${table.tableName}")
+            SchemaUtils.create(table)
+        }
+        log.info { "tables recreated" }
+    }
+
+    fun <T> doInTransaction(operation: Transaction.() -> T) = getConnection().run {
         transaction {
             if (Configuration.LOG_SQL_QUERIES.value) addLogger(sqlLogger)
-            operation()
+            operation(this)
         }
     }
 

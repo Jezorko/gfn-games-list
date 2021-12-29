@@ -1,5 +1,6 @@
 package jezorko.github.gfngameslist.shared
 
+import java.util.UUID.randomUUID
 import java.util.concurrent.TimeUnit.MINUTES
 import kotlin.reflect.KProperty0
 
@@ -59,6 +60,12 @@ object Configuration {
         Configuration::LOG_SQL_QUERIES,
         false,
         String::toBoolean
+    )
+
+    val ADMIN_TOKEN: EnvironmentVariable<String> = EnvironmentVariable(
+        Configuration::ADMIN_TOKEN,
+        randomUUID().toString(),
+        String::toString
     )
 
 }

@@ -8,10 +8,14 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
+import jezorko.github.gfngameslist.database.databaseRoutes
 import jezorko.github.gfngameslist.games.gamesRoutes
 import jezorko.github.gfngameslist.localization.localizationRoutes
 import jezorko.github.gfngameslist.shared.Configuration
 import kotlinx.html.*
+import mu.KotlinLogging.logger
+
+val log = logger { }
 
 fun HTML.index() {
     head {
@@ -26,7 +30,7 @@ fun HTML.index() {
 }
 
 fun main() {
-
+    log.info { "admin token is ${Configuration.ADMIN_TOKEN.value}" }
 
     embeddedServer(Netty, port = Configuration.SERVER_PORT.value, host = "127.0.0.1") {
         routing {
@@ -38,7 +42,8 @@ fun main() {
             }
         }.mergeAll(
             localizationRoutes(),
-            gamesRoutes()
+            gamesRoutes(),
+            databaseRoutes()
         )
     }.start(wait = true)
 }
