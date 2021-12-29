@@ -28,6 +28,7 @@ import styled.css
 import styled.styledDiv
 import styled.styledInput
 import styled.styledSelect
+import kotlin.js.Date
 import kotlin.reflect.KMutableProperty1
 
 var allowScrollUpdate = true
@@ -55,7 +56,11 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     override fun RBuilder.render() {
         styledDiv {
             css { +MainPageStyles.element }
-            +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0]
+            +state.messages[
+                    Messages::supportedGamesCount,
+                    state.getGamesResponse?.supportedGamesCount ?: 0,
+                    (Date().getTime().toLong() - (state.getGamesResponse?.lastUpdatedAt ?: 0)) / (60 * 1_000)
+            ]
         }
         styledSelect {
             css { +MainPageStyles.element }

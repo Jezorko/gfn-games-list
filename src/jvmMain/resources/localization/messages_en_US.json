@@ -1,5 +1,5 @@
 {
-  "supportedGamesCount": "$1 games supported by GeForce NOW.",
+  "supportedGamesCount": "$1 games supported by GeForce NOW (last updated $2 minutes ago).",
   "gameImage": "image",
   "gameTitle": "title",
   "availableOnPlatform": "available on",

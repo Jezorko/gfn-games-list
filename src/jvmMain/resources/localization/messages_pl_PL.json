@@ -1,5 +1,5 @@
 {
-  "supportedGamesCount": "$1 gier wspieranych przez GeForce NOW.",
+  "supportedGamesCount": "$1 gier wspieranych przez GeForce NOW (lista zaktualizowana $2 minut temu).",
   "gameImage": "okładka",
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
