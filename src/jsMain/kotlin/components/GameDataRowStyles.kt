@@ -2,6 +2,7 @@ package components
 
 
 import kotlinx.css.*
+import shared.DarkTheme
 import styled.StyleSheet
 
 object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {

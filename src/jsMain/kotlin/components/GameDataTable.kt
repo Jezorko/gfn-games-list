@@ -7,10 +7,7 @@ import react.Props
 import react.RBuilder
 import react.RComponent
 import react.State
-import styled.styledTable
-import styled.styledTbody
-import styled.styledTh
-import styled.styledTr
+import styled.*
 
 external interface GameDataTableProps : Props {
     var messages: Messages?
@@ -21,13 +18,31 @@ class GameDataTable(props: GameDataTableProps) : RComponent<GameDataTableProps, 
 
     override fun RBuilder.render() {
         styledTable {
+            css { +GameDataTableStyles.element }
             styledTbody {
+                css { +GameDataTableStyles.element }
                 styledTr {
-                    styledTh { +props.messages[Messages::gameImage] }
-                    styledTh { +props.messages[Messages::gameTitle] }
-                    styledTh { +props.messages[Messages::publisher] }
-                    styledTh { +props.messages[Messages::availableOnPlatform] }
-                    styledTh { +props.messages[Messages::status] }
+                    css { +GameDataTableStyles.element }
+                    styledTh {
+                        css { +GameDataTableStyles.element }
+                        +props.messages[Messages::gameImage]
+                    }
+                    styledTh {
+                        css { +GameDataTableStyles.element }
+                        +props.messages[Messages::gameTitle]
+                    }
+                    styledTh {
+                        css { +GameDataTableStyles.element }
+                        +props.messages[Messages::publisher]
+                    }
+                    styledTh {
+                        css { +GameDataTableStyles.element }
+                        +props.messages[Messages::availableOnPlatform]
+                    }
+                    styledTh {
+                        css { +GameDataTableStyles.element }
+                        +props.messages[Messages::status]
+                    }
                 }
                 props.games.forEachIndexed { index, game ->
                     child(GameDataRow::class) {

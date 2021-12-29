@@ -23,6 +23,7 @@ import react.dom.attrs
 import react.dom.option
 import shared.setState
 import shared.targetValue
+import styled.css
 import styled.styledDiv
 import styled.styledInput
 import styled.styledSelect
@@ -51,9 +52,11 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     override fun RBuilder.render() {
         styledDiv {
+            css {+MainPageStyles.element}
             +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0]
         }
         styledSelect {
+            css {+MainPageStyles.element}
             +Language.ENGLISH.readableName
             Language.values().forEach { language -> option { +language.readableName } }
             attrs {
@@ -64,6 +67,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledInput(type = InputType.text) {
+            css {+MainPageStyles.element}
             attrs {
                 id = "game-title-search"
                 onChangeFunction = updateState(MainPageState::titleSearch)
@@ -71,6 +75,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledInput(type = InputType.text) {
+            css {+MainPageStyles.element}
             attrs {
                 id = "game-publisher-search"
                 onChangeFunction = updateState(MainPageState::publisherSearch)
@@ -78,6 +83,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledSelect {
+            css {+MainPageStyles.element}
             option { +"" }
             validStores.forEach { validLauncher -> option { +validLauncher.name } }
             attrs {
@@ -100,6 +106,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledDiv {
+            css {+MainPageStyles.element}
             +state.messages[Messages::endOfGamesList]
         }
 
