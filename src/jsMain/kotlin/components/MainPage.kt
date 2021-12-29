@@ -52,11 +52,11 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     override fun RBuilder.render() {
         styledDiv {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             +state.messages[Messages::supportedGamesCount, state.getGamesResponse?.supportedGamesCount ?: 0]
         }
         styledSelect {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             +Language.ENGLISH.readableName
             Language.values().forEach { language -> option { +language.readableName } }
             attrs {
@@ -67,7 +67,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledInput(type = InputType.text) {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             attrs {
                 id = "game-title-search"
                 onChangeFunction = updateState(MainPageState::titleSearch)
@@ -75,7 +75,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledInput(type = InputType.text) {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             attrs {
                 id = "game-publisher-search"
                 onChangeFunction = updateState(MainPageState::publisherSearch)
@@ -83,7 +83,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledSelect {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             option { +"" }
             validStores.forEach { validLauncher -> option { +validLauncher.name } }
             attrs {
@@ -106,7 +106,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             }
         }
         styledDiv {
-            css {+MainPageStyles.element}
+            css { +MainPageStyles.element }
             +state.messages[Messages::endOfGamesList]
         }
 
@@ -131,7 +131,6 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                     }.then {
                         if (response.games.isNotEmpty()) {
                             allowScrollUpdate = true
-                            infiniteScroll() // in case if we haven't filled entire screen
                         } else {
                             println("reached end of games list!")
                         }
