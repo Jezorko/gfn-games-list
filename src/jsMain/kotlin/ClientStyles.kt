@@ -9,7 +9,6 @@ object ClientStyles : StyleSheet("ClientStyles", isStatic = true) {
         top = LinearDimension("0")
         margin = "0"
         width = LinearDimension("100%")
-        height = LinearDimension("100%")
         color = DarkTheme.fontColor
         backgroundColor = DarkTheme.backgroundColor
     }

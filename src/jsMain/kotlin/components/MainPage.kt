@@ -1,13 +1,13 @@
 package components
 
 import api.ApiClient
+import getMainContainer
 import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.Store
 import jezorko.github.gfngameslist.games.storeFromReadableName
 import jezorko.github.gfngameslist.games.validStores
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
-import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.html.InputType
 import kotlinx.html.id
@@ -29,9 +29,8 @@ import styled.*
 import kotlin.js.Date
 import kotlin.reflect.KMutableProperty1
 
-var allowScrollUpdate = true
-
 external interface MainPageState : State {
+    var allowScrollUpdate: Boolean?
     var loadingMoreGames: Boolean?
     var language: Language?
     var messages: Messages?
@@ -47,9 +46,13 @@ external interface MainPageState : State {
 class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     override fun componentDidMount() {
-        updateGamesList()
         updateMessages()
-        infiniteScroll()
+        setState {
+            allowScrollUpdate = true
+        }.then {
+            updateGamesList()
+            infiniteScroll()
+        }
     }
 
     override fun RBuilder.render() {
@@ -140,13 +143,12 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     private fun infiniteScroll() {
-        if (
-            window.scrollY + window.innerHeight
-            >= (document.body?.offsetHeight?.minus(100) ?: Int.MAX_VALUE)
-            && allowScrollUpdate
-        ) {
-            allowScrollUpdate = false
-            setState { searchPage = searchPage?.plus(1) ?: 1 }.then {
+        val scrolledToEndOfPage = window.scrollY + window.innerHeight >= getMainContainer().offsetHeight - 1000
+        if (scrolledToEndOfPage && state.allowScrollUpdate == true) {
+            setState {
+                allowScrollUpdate = false
+                searchPage = searchPage?.plus(1) ?: 1
+            }.then {
                 getGames(it.searchPage!!).then { response ->
                     setState {
                         getGamesResponse = getGamesResponse?.copy(
@@ -154,8 +156,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                         ) ?: response
                     }.then {
                         if (response.games.isNotEmpty()) {
-                            allowScrollUpdate = true
-                            infiniteScroll() // scroll more if possible
+                            setState { allowScrollUpdate = true }.then { infiniteScroll() }
                         } else {
                             println("reached end of games list!")
                         }
@@ -177,7 +178,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             setState {
                 getGamesResponse = response
                 searchPage = 0
-            }.then { allowScrollUpdate = true }
+            }.then { setState { allowScrollUpdate = true } }
         }
     }
 
