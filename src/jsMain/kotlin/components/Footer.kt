@@ -25,7 +25,7 @@ class Footer(props: Props) : RComponent<Props, FooterState>(props) {
         styledFooter {
             +"Built from "
             styledA {
-                val commitUrl = state.version?.run { "$repositoryUrl/commit$commitSlug" } ?: "unknown"
+                val commitUrl = state.version?.run { "$repositoryUrl/commit/$commitSlug" } ?: "unknown"
                 +commitUrl
                 attrs {
                     href = commitUrl
