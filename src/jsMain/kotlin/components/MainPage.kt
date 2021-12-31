@@ -155,6 +155,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                     }.then {
                         if (response.games.isNotEmpty()) {
                             allowScrollUpdate = true
+                            infiniteScroll() // scroll more if possible
                         } else {
                             println("reached end of games list!")
                         }
