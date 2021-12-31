@@ -142,7 +142,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     private fun infiniteScroll() {
         if (
             window.scrollY + window.innerHeight
-            >= (document.body?.offsetHeight?.minus(500) ?: Int.MAX_VALUE)
+            >= (document.body?.offsetHeight?.minus(100) ?: Int.MAX_VALUE)
             && allowScrollUpdate
         ) {
             allowScrollUpdate = false
@@ -189,7 +189,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
 
     private fun getGames(page: Int) = setState { loadingMoreGames = true }.flatThen {
         ApiClient.getGames(
-            state.limitSearch ?: 10,
+            state.limitSearch ?: 20,
             page,
             state.titleSearch,
             state.storeSearch,
