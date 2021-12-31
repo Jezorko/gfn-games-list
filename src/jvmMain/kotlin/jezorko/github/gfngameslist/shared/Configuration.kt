@@ -68,4 +68,16 @@ object Configuration {
         String::toString
     )
 
+    val HEROKU_SLUG_COMMIT: EnvironmentVariable<String> = EnvironmentVariable(
+        Configuration::HEROKU_SLUG_COMMIT,
+        "unknown",
+        String::toString
+    )
+
+    val PROJECT_GIT_REPOSITORY: EnvironmentVariable<String> = EnvironmentVariable(
+        Configuration::PROJECT_GIT_REPOSITORY,
+        "https://github.com/Jezorko/gfn-games-list",
+        String::toString
+    )
+
 }

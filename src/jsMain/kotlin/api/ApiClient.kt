@@ -3,6 +3,7 @@ package api
 import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.Store
 import jezorko.github.gfngameslist.localization.Messages
+import jezorko.github.gfngameslist.versions.VersionInfo
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
 import localization.Language
@@ -55,6 +56,24 @@ object ApiClient {
                 }
             } else {
                 Promise.reject(Error("failed to fetch games: ${response.text()}"))
+            }
+        }
+    }
+
+    fun getVersionInfo(): Promise<VersionInfo> {
+        return window.fetch(
+            "/api/versions",
+            object : RequestInit {
+                override var method: String? = "GET"
+            }
+        ).flatThen { response ->
+            if (response.status == 200.toShort()) {
+                response.text().then { responseBodyAsText ->
+                    json.decodeFromString(responseBodyAsText)
+                }
+            } else {
+                console.error("cannot resolve version information, received HTTP ${response.status}")
+                return@flatThen Promise.resolve(VersionInfo("unknown", "unknown"))
             }
         }
     }

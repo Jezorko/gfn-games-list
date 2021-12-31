@@ -13,6 +13,7 @@ import jezorko.github.gfngameslist.games.GamesFacade
 import jezorko.github.gfngameslist.games.gamesRoutes
 import jezorko.github.gfngameslist.localization.localizationRoutes
 import jezorko.github.gfngameslist.shared.Configuration
+import jezorko.github.gfngameslist.versions.versionsRoutes
 import kotlinx.html.*
 import mu.KotlinLogging.logger
 
@@ -45,7 +46,8 @@ fun main() {
         }.mergeAll(
             localizationRoutes(),
             gamesRoutes(),
-            databaseRoutes()
+            databaseRoutes(),
+            versionsRoutes()
         )
     }.start(wait = true)
 }

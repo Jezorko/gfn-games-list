@@ -124,6 +124,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             css { +MainPageStyles.element }
             +state.messages[Messages::endOfGamesList]
         }
+        child(Footer::class) {}
 
         window.addEventListener("scroll", object : EventListener {
             override fun handleEvent(event: Event) = infiniteScroll()
