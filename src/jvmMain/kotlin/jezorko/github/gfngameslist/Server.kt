@@ -4,6 +4,7 @@ import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -37,11 +38,11 @@ fun main() {
     embeddedServer(Netty, port = Configuration.PORT.value) {
         GamesFacade.updateIfNeeded()
         routing {
-            get("/") {
-                call.respondHtml(HttpStatusCode.OK, HTML::index)
-            }
+            get("/") { call.respondHtml(HttpStatusCode.OK, HTML::index) }
+            get("/favicon.ico") { call.respondRedirect("https://www.nvidia.com/favicon.ico") }
             static("/static") {
-                resources()
+                resource("gfn-games-list.js")
+                resources("/static")
             }
         }.mergeAll(
             localizationRoutes(),

@@ -22,18 +22,17 @@ import react.RComponent
 import react.State
 import react.dom.attrs
 import react.dom.option
+import shared.flatThen
 import shared.setState
 import shared.targetValue
-import styled.css
-import styled.styledDiv
-import styled.styledInput
-import styled.styledSelect
+import styled.*
 import kotlin.js.Date
 import kotlin.reflect.KMutableProperty1
 
 var allowScrollUpdate = true
 
 external interface MainPageState : State {
+    var loadingMoreGames: Boolean?
     var language: Language?
     var messages: Messages?
     var limitSearch: Int?
@@ -120,10 +119,19 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 }
             }
         }
-        styledDiv {
-            css { +MainPageStyles.element }
-            +state.messages[Messages::endOfGamesList]
+        if (state.loadingMoreGames == true) {
+            styledImg {
+                attrs {
+                    src = "static/spinner.gif"
+                }
+            }
+        } else {
+            styledDiv {
+                css { +MainPageStyles.element }
+                +state.messages[Messages::endOfGamesList]
+            }
         }
+
         child(Footer::class) {}
 
         window.addEventListener("scroll", object : EventListener {
@@ -178,7 +186,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         }
     }
 
-    private fun getGames(page: Int) =
+    private fun getGames(page: Int) = setState { loadingMoreGames = true }.flatThen {
         ApiClient.getGames(
             state.limitSearch ?: 10,
             page,
@@ -186,6 +194,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             state.storeSearch,
             state.publisherSearch,
             state.genresSearch
-        )
+        ).flatThen { response -> setState { loadingMoreGames = false }.then { response } }
+    }
 
 }
