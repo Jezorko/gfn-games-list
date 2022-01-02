@@ -2,26 +2,26 @@ package components
 
 
 import kotlinx.css.*
-import shared.DarkTheme
+import shared.theme
 import styled.StyleSheet
 
 object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {
-    val tableData by css { color = DarkTheme.tableFontColor }
+    val tableData by css { color = theme.tableFontColor }
     val tableRowAvailable by css {
-        backgroundColor = DarkTheme.tableAvailableBackgroundColorOdd
-        nthChild("even") { backgroundColor = DarkTheme.tableAvailableBackgroundColorEven }
+        backgroundColor = theme.tableAvailableBackgroundColorOdd
+        nthChild("even") { backgroundColor = theme.tableAvailableBackgroundColorEven }
     }
     val tableRowMaintenance by css {
-        backgroundColor = DarkTheme.tableMaintenanceBackgroundColorOdd
-        nthChild("even") { backgroundColor = DarkTheme.tableMaintenanceBackgroundColorEven }
+        backgroundColor = theme.tableMaintenanceBackgroundColorOdd
+        nthChild("even") { backgroundColor = theme.tableMaintenanceBackgroundColorEven }
     }
     val tableRowPatching by css {
-        backgroundColor = DarkTheme.tablePatchingBackgroundColorOdd
-        nthChild("even") { backgroundColor = DarkTheme.tablePatchingBackgroundColorEven }
+        backgroundColor = theme.tablePatchingBackgroundColorOdd
+        nthChild("even") { backgroundColor = theme.tablePatchingBackgroundColorEven }
     }
     val tableRowUnknown by css {
-        backgroundColor = DarkTheme.tableUnknownBackgroundColorOdd
-        nthChild("even") { backgroundColor = DarkTheme.tableUnknownBackgroundColorEven }
+        backgroundColor = theme.tableUnknownBackgroundColorOdd
+        nthChild("even") { backgroundColor = theme.tableUnknownBackgroundColorEven }
     }
     val gameImage by css {
         maxWidth = LinearDimension("25%")

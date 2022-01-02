@@ -1,5 +1,5 @@
 import kotlinx.css.*
-import shared.DarkTheme
+import shared.theme
 import styled.StyleSheet
 
 object ClientStyles : StyleSheet("ClientStyles", isStatic = true) {
@@ -9,7 +9,7 @@ object ClientStyles : StyleSheet("ClientStyles", isStatic = true) {
         top = LinearDimension("0")
         margin = "0"
         width = LinearDimension("100%")
-        color = DarkTheme.fontColor
-        backgroundColor = DarkTheme.backgroundColor
+        color = theme.fontColor
+        backgroundColor = theme.backgroundColor
     }
 } 
