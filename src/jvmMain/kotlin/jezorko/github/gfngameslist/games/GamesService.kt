@@ -20,7 +20,7 @@ internal object GamesService {
         limit: Int,
         page: Int,
         titlePart: String?,
-        store: Store?,
+        store: GameStore?,
         publisherPart: String?,
         genrePart: String?
     ) =
@@ -34,7 +34,7 @@ internal object GamesService {
                 .filter { game ->
                     genrePart?.let {
                         game.genres.any { genre ->
-                            genre.uppercase().contains(it.uppercase())
+                            genre.name.contains(it.uppercase())
                         }
                     } ?: true
                 }
@@ -57,33 +57,21 @@ internal object GamesService {
                 val timestampNow = currentTimeMillis()
                 if (LatestUpdatesRepository.shouldUpdate()) {
                     log.info { "games update needed, starting" }
-                    val games = (NVidiaApiClient.fetchSupportedGamesList() ?: emptyList())
-                        .map { supportedGame ->
+                    val games = NVidiaApiClient.fetchSupportedGamesList()
+                        .flatMap { supportedGame -> supportedGame.variants.map { variant -> variant to supportedGame } }
+                        .map { variantToSupportedGame ->
                             Game(
-                                id = supportedGame.id,
-                                title = supportedGame.title,
-                                store = try {
-                                    Store.valueOf(supportedGame.store.uppercase().replace(' ', '_'))
-                                } catch (exception: IllegalArgumentException) {
-                                    log.warn {
-                                        "received unsupported ${supportedGame::store.name} value ${supportedGame.store} for game ${supportedGame.title}"
-                                    }
-                                    Store.UNKNOWN
-                                },
-                                imageUrl = supportedGame.imageUrl,
-                                registeredAt = timestampNow,
+                                id = variantToSupportedGame.second.id,
+                                title = variantToSupportedGame.second.title,
+                                store = variantToSupportedGame.first.appStore,
+                                imageUrl = variantToSupportedGame.second.imageUrl,
+                                registeredAt = variantToSupportedGame.first.gfn.releaseDate?.toInstant()?.toEpochMilli()
+                                    ?: timestampNow,
                                 updatedAt = timestampNow,
-                                status = try {
-                                    GameStatus.valueOf(supportedGame.status)
-                                } catch (exception: IllegalArgumentException) {
-                                    log.warn {
-                                        "received unsupported ${supportedGame::status.name} value ${supportedGame.status} for game ${supportedGame.title}"
-                                    }
-                                    GameStatus.UNKNOWN
-                                },
-                                publisher = supportedGame.publisher,
-                                storeUrl = supportedGame.storeUrl,
-                                genres = supportedGame.genres
+                                status = variantToSupportedGame.first.gfn.status,
+                                publisher = variantToSupportedGame.first.publisherName,
+                                storeUrl = "",
+                                genres = variantToSupportedGame.second.genres
                             )
                         }.toList()
                     games.forEach(GamesRepository::putGame)

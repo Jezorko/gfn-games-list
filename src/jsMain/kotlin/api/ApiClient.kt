@@ -1,7 +1,7 @@
 package api
 
 import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.Store
+import jezorko.github.gfngameslist.games.GameStore
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.versions.VersionInfo
 import kotlinx.browser.window
@@ -36,7 +36,7 @@ object ApiClient {
         limit: Int,
         page: Int,
         titlePart: String?,
-        store: Store?,
+        store: GameStore?,
         publisherPart: String?,
         genrePart: String?
     ): Promise<GetGamesResponse> {

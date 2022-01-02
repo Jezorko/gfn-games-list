@@ -1,5 +1,10 @@
 package jezorko.github.gfngameslist.database
 
+import jezorko.github.gfngameslist.games.Games
+import jezorko.github.gfngameslist.games.LatestUpdates
+import jezorko.github.gfngameslist.games.LatestUpdates.getValue
+import jezorko.github.gfngameslist.games.LatestUpdates.initialize
+import jezorko.github.gfngameslist.games.LatestUpdates.setValue
 import jezorko.github.gfngameslist.shared.Configuration
 import jezorko.github.gfngameslist.shared.Environment
 import mu.KotlinLogging.logger
@@ -18,6 +23,17 @@ interface DatabaseConfiguration {
 
 object Database {
 
+    private object DatabaseVersions : SingletonTable() {
+        val version = long("version")
+    }
+
+    private const val INITIAL_VERSION = 0L
+
+    /**
+     * Update when breaking migrations are applied
+     */
+    private const val currentVersion = 1L
+
     private val log = logger {}
     private val sqlLogger = object : SqlLogger {
         override fun log(context: StatementContext, transaction: Transaction) {
@@ -29,12 +45,21 @@ object Database {
         Environment.LOCAL -> PostgresLocal()
     }
 
-    private val registeredTables = mutableSetOf<Table>()
+    private val registeredTables = setOf(Games, LatestUpdates)
 
-    fun <T : Table> T.register() {
-        val table = this
-        registeredTables.add(table)
-        doInTransaction { SchemaUtils.create(table) }
+    init {
+        doInTransaction {
+            SchemaUtils.create(DatabaseVersions)
+            DatabaseVersions.initialize { it[version] = INITIAL_VERSION }
+            val databaseVersion = DatabaseVersions.getValue()!![DatabaseVersions.version]
+            if (databaseVersion != currentVersion) {
+                log.info { "database version $databaseVersion older than current $currentVersion, wiping database" }
+                recreateTables()
+                DatabaseVersions.setValue { it[version] = currentVersion }
+            } else {
+                registeredTables.forEach(SchemaUtils::create)
+            }
+        }
     }
 
     fun recreateTables() = doInTransaction {

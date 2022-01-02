@@ -11,7 +11,7 @@ fun Application.gamesRoutes() = routing {
         val titlePart = call.request.queryParameters["title"]
         val storeParam = call.request.queryParameters["store"]
         val store = if (storeParam != null) try {
-            Store.valueOf(storeParam)
+            GameStore.valueOf(storeParam)
         } catch (exception: IllegalArgumentException) {
             null
         } else null

@@ -3,7 +3,7 @@ package components
 import api.ApiClient
 import getMainContainer
 import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.Store
+import jezorko.github.gfngameslist.games.GameStore
 import jezorko.github.gfngameslist.games.storeFromReadableName
 import jezorko.github.gfngameslist.games.validStores
 import jezorko.github.gfngameslist.localization.Messages
@@ -39,7 +39,7 @@ external interface MainPageState : State {
     var titleSearch: String?
     var publisherSearch: String?
     var genresSearch: String?
-    var storeSearch: Store?
+    var storeSearch: GameStore?
     var getGamesResponse: GetGamesResponse?
 }
 

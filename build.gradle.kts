@@ -47,6 +47,7 @@ kotlin {
         val jvmMain by getting {
             val exposedVersion = "0.34.1"
             val testContainersVersion = "1.16.2"
+            val jacksonVersion = "2.13.1"
             dependencies {
                 implementation("io.ktor:ktor-server-netty:1.6.3")
                 implementation("io.ktor:ktor-html-builder:1.6.3")
@@ -57,9 +58,10 @@ kotlin {
                 implementation("org.testcontainers:testcontainers:$testContainersVersion")
                 implementation("org.testcontainers:postgresql:$testContainersVersion")
                 implementation("ch.qos.logback:logback-classic:1.2.3")
-                implementation("com.fasterxml.jackson.core:jackson-core:2.13.1")
-                implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
-                implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+                implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+                implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+                implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+                implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
                 implementation("io.github.microutils:kotlin-logging:1.12.5")
             }
         }

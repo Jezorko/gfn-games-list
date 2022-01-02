@@ -2,27 +2,24 @@ package jezorko.github.gfngameslist.games
 
 import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.database.Database.insertOrUpdate
-import jezorko.github.gfngameslist.database.Database.register
-import org.jetbrains.exposed.sql.select
+import jezorko.github.gfngameslist.shared.deserializeSet
+import jezorko.github.gfngameslist.shared.serialize
 import org.jetbrains.exposed.sql.selectAll
+import java.util.*
 
 private const val GENRES_SEPARATOR = ", "
 
 internal object GamesRepository {
 
-    init {
-        Games.register()
-    }
-
     internal fun findAll() = doInTransaction {
         Games.selectAll().map {
             Game(
-                id = it[Games.id].value,
+                id = it[Games.id].value.toString(),
                 title = it[Games.title],
                 store = try {
-                    Store.valueOf(it[Games.store])
+                    GameStore.valueOf(it[Games.store])
                 } catch (exception: IllegalArgumentException) {
-                    Store.UNKNOWN
+                    GameStore.NONE
                 },
                 imageUrl = it[Games.imageUrl],
                 registeredAt = it[Games.registeredAt],
@@ -34,17 +31,17 @@ internal object GamesRepository {
                 },
                 publisher = it[Games.publisher],
                 storeUrl = it[Games.storeUrl],
-                genres = it[Games.genres].split(GENRES_SEPARATOR).toSet()
+                genres = GameGenre::class.deserializeSet(it[Games.genres])
             )
         }
     }
 
     internal fun putGame(game: Game) = doInTransaction {
         Games.insertOrUpdate({
-            Games.id eq game.id
+            Games.id eq UUID.fromString(game.id)
         }) { existingValue, updatedValue ->
             val registrationTime = existingValue?.get(registeredAt) ?: -1
-            updatedValue[id] = game.id
+            updatedValue[id] = UUID.fromString(game.id)
             updatedValue[store] = game.store.name
             updatedValue[title] = game.title
             updatedValue[imageUrl] = game.imageUrl
@@ -53,14 +50,8 @@ internal object GamesRepository {
             updatedValue[status] = game.status.name
             updatedValue[publisher] = game.publisher
             updatedValue[storeUrl] = game.storeUrl
-            updatedValue[genres] = game.genres.joinToString(GENRES_SEPARATOR)
+            updatedValue[genres] = game.genres.serialize()
         }
-    }
-
-    internal fun countSupportedGames() = doInTransaction {
-        Games.select { Games.store notInList unsupportedStores.map(Store::name) }
-            .distinctBy { it[Games.title] }
-            .count()
     }
 
 }

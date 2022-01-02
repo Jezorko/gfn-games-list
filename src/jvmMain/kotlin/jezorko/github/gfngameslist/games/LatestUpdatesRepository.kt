@@ -1,7 +1,6 @@
 package jezorko.github.gfngameslist.games
 
 import jezorko.github.gfngameslist.database.Database.doInTransaction
-import jezorko.github.gfngameslist.database.Database.register
 import jezorko.github.gfngameslist.database.SingletonTable
 import jezorko.github.gfngameslist.games.LatestUpdates.getValue
 import jezorko.github.gfngameslist.games.LatestUpdates.initialize
@@ -13,7 +12,7 @@ import java.lang.System.currentTimeMillis
 private const val INITIAL_TIMESTAMP = 0L
 
 
-private object LatestUpdates : SingletonTable() {
+object LatestUpdates : SingletonTable() {
     val timestamp = long("timestamp")
 }
 
@@ -21,7 +20,6 @@ object LatestUpdatesRepository {
 
     init {
         doInTransaction {
-            LatestUpdates.register()
             LatestUpdates.initialize { it[timestamp] = INITIAL_TIMESTAMP }
         }
     }

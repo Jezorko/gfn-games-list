@@ -29,7 +29,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
             css {
                 +when (props.game.status) {
                     GameStatus.AVAILABLE -> GameDataRowStyles.tableRowAvailable
-                    GameStatus.MAINTENANCE -> GameDataRowStyles.tableRowMaintenance
+                    GameStatus.SERVER_MAINTENANCE -> GameDataRowStyles.tableRowMaintenance
                     GameStatus.PATCHING -> GameDataRowStyles.tableRowPatching
                     else -> GameDataRowStyles.tableRowUnknown
                 }
@@ -94,7 +94,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                 styledDiv {
                     +when (props.game.status) {
                         GameStatus.AVAILABLE -> props.messages[Messages::specificStatus, GameStatusMessages::available]
-                        GameStatus.MAINTENANCE -> props.messages[Messages::specificStatus, GameStatusMessages::maintenance]
+                        GameStatus.SERVER_MAINTENANCE -> props.messages[Messages::specificStatus, GameStatusMessages::maintenance]
                         GameStatus.PATCHING -> props.messages[Messages::specificStatus, GameStatusMessages::patching]
                         GameStatus.UNKNOWN -> props.messages[Messages::specificStatus, GameStatusMessages::unknown]
                     }

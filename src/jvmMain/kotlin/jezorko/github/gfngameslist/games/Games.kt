@@ -1,8 +1,9 @@
 package jezorko.github.gfngameslist.games
 
-import org.jetbrains.exposed.dao.id.LongIdTable
+import jezorko.github.gfngameslist.shared.maxSerializedLength
+import org.jetbrains.exposed.dao.id.UUIDTable
 
-internal object Games : LongIdTable() {
+internal object Games : UUIDTable() {
 
     val title = varchar("title", 255)
     val store = varchar("store", 255)
@@ -12,6 +13,6 @@ internal object Games : LongIdTable() {
     val status = varchar("status", 255)
     val publisher = varchar("publisher", 255)
     val storeUrl = varchar("store_url", 2048)
-    val genres = varchar("genres", 2048)
+    val genres = varchar("genres", GameGenre::class.maxSerializedLength())
 
 }
