@@ -3,3 +3,4 @@ build
 .gradle
 .idea
 !.idea/workspace.xml.example
+.attach_pid*
