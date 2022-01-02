@@ -4,7 +4,7 @@
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
   "publisher": "wydawca",
-  "genres": "kategorie",
+  "genre": "kategorie",
   "status": "status",
   "specificStatus": {
     "available": "działa w porządku",
@@ -15,5 +15,25 @@
   "endOfGamesList": "wincyj ni ma!",
   "searchByTitlePlaceholder": "wyszukaj po tytule",
   "searchByPublisherPlaceholder": "wyszukaj po wydawcy",
-  "searchByGenresPlaceholder": "search by kategoriach"
+  "searchByGenresPlaceholder": "kategorie",
+  "genres": {
+    "ACTION": "akcja",
+    "ADVENTURE": "przygodowa",
+    "INDIE": "niezależna",
+    "ROLE_PLAYING": "odgrywanie ról",
+    "FIRST_PERSON_SHOOTER": "strzelanka pierwszoosobowa",
+    "FREE_TO_PLAY": "darmowa",
+    "MULTIPLAYER_ONLINE_BATTLE_ARENA": "MOBA",
+    "STRATEGY": "strategia",
+    "MASSIVELY_MULTIPLAYER_ONLINE": "MMO",
+    "SIMULATION": "symulacja",
+    "CASUAL": "luźna",
+    "RACING": "wyścigi",
+    "PUZZLE": "puzle",
+    "TECH_DEMO": "demonstracja technologii",
+    "ARCADE": "zręcznościowa",
+    "SPORTS": "sport",
+    "PLATFORMER": "platformowa",
+    "FAMILY": "rodzinna"
+  }
 }

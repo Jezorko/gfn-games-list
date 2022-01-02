@@ -2,10 +2,7 @@ package components
 
 import api.ApiClient
 import getMainContainer
-import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.GameStore
-import jezorko.github.gfngameslist.games.storeFromReadableName
-import jezorko.github.gfngameslist.games.validStores
+import jezorko.github.gfngameslist.games.*
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
 import kotlinx.browser.window
@@ -89,6 +86,20 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 id = "game-publisher-search"
                 onChangeFunction = updateState(MainPageState::publisherSearch)
                 placeholder = state.messages[Messages::searchByPublisherPlaceholder]
+            }
+        }
+        child(MultiSelect::class) {
+            attrs {
+                id = "game-genres-search"
+                name = state.messages[Messages::searchByGenresPlaceholder]
+                options =
+                    GameGenre.values().map { genre ->
+                        Option(
+                            name = state.messages[{ it.genres[genre] }],
+                            value = genre.name
+                        )
+                    }.filter { it.name.isNotEmpty() }
+                onSelection = { println("current selection is $it") }
             }
         }
         styledInput(type = InputType.text) {

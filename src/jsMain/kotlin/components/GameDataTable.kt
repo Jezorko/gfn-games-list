@@ -37,7 +37,7 @@ class GameDataTable(props: GameDataTableProps) : RComponent<GameDataTableProps, 
                     }
                     styledTh {
                         css { +GameDataTableStyles.element }
-                        +props.messages[Messages::genres]
+                        +props.messages[Messages::genre]
                     }
                     styledTh {
                         css { +GameDataTableStyles.element }

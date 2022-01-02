@@ -4,7 +4,7 @@
   "gameTitle": "title",
   "availableOnPlatform": "available on",
   "publisher": "publisher",
-  "genres": "genres",
+  "genre": "genres",
   "status": "status",
   "specificStatus": {
     "available": "online",
@@ -15,5 +15,25 @@
   "endOfGamesList": "that's it, folks!",
   "searchByTitlePlaceholder": "search by title",
   "searchByPublisherPlaceholder": "search by publisher",
-  "searchByGenresPlaceholder": "search by genres"
+  "searchByGenresPlaceholder": "genres",
+  "genres": {
+    "ACTION": "action",
+    "ADVENTURE": "adventure",
+    "INDIE": "indie",
+    "ROLE_PLAYING": "role playing",
+    "FIRST_PERSON_SHOOTER": "first person shooter",
+    "FREE_TO_PLAY": "free to play",
+    "MULTIPLAYER_ONLINE_BATTLE_ARENA": "MOBA",
+    "STRATEGY": "strategy",
+    "MASSIVELY_MULTIPLAYER_ONLINE": "MMO",
+    "SIMULATION": "simulation",
+    "CASUAL": "casual",
+    "RACING": "racing",
+    "PUZZLE": "puzzle",
+    "TECH_DEMO": "tech demo",
+    "ARCADE": "arcade",
+    "SPORTS": "sports",
+    "PLATFORMER": "platformer",
+    "FAMILY": "family"
+  }
 }
