@@ -14,7 +14,7 @@ internal object GamesService {
     private val log = logger { }
 
     private val lastLocalCacheUpdateTimestamp = AtomicLong(0)
-    private val localGamesCache = AtomicReference<List<Game>>(emptyList())
+    private val localGamesCache = AtomicReference<Collection<Game>>(emptyList())
     private val updateOngoing = AtomicBoolean(false)
 
     fun getGames(
@@ -74,8 +74,8 @@ internal object GamesService {
                                 storeUrl = "",
                                 genres = supportedGame.genres
                             )
-                        }.toList()
-                    games.forEach(GamesRepository::putGame)
+                        }
+                    GamesRepository.updateGames(games)
                     LatestUpdatesRepository.registerUpdateComplete(timestampNow)
                     localGamesCache.set(games)
                     lastLocalCacheUpdateTimestamp.set(timestampNow)

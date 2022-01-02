@@ -4,12 +4,14 @@ import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.database.Database.insertOrUpdate
 import jezorko.github.gfngameslist.shared.deserializeSet
 import jezorko.github.gfngameslist.shared.serialize
+import mu.KotlinLogging.logger
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import java.util.*
 
-private const val GENRES_SEPARATOR = ", "
-
 internal object GamesRepository {
+
+    private val log = logger { }
 
     internal fun findAll() = doInTransaction {
         Games.selectAll().map {
@@ -32,7 +34,16 @@ internal object GamesRepository {
         }
     }
 
-    internal fun putGame(game: Game) = doInTransaction {
+    internal fun updateGames(games: Collection<Game>) {
+        removeGamesNotIn(games.map(Game::id).map(UUID::fromString).toSet())
+        log.info { "stale games removed" }
+        games.forEach(this::putGame)
+        log.info { "existing games updated" }
+    }
+
+    private fun removeGamesNotIn(ids: Set<UUID>) = doInTransaction { Games.deleteWhere { Games.id notInList ids } }
+
+    private fun putGame(game: Game) = doInTransaction {
         Games.insertOrUpdate({
             Games.id eq UUID.fromString(game.id)
         }) { existingValue, updatedValue ->
