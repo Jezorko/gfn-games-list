@@ -4,6 +4,24 @@ import jezorko.github.gfngameslist.shared.EnumWithReadableName
 import jezorko.github.gfngameslist.shared.fromReadableName
 import kotlinx.serialization.Serializable
 
+enum class Region(override val readableName: String) : EnumWithReadableName {
+    US_CENTRAL("US Central"),
+    US_EAST("US East"),
+    US_MIDWEST("US Midwest"),
+    US_NORTHEAST("US Northeast"),
+    US_NORTHWEST("US Northwest"),
+    US_SOUTH("US South"),
+    US_SOUTH_2("US South 2"),
+    US_SOUTHWEST("US Southwest"),
+    US_WEST_2("US West 2"),
+    EU_CENTRAL_2("EU Central 2"),
+    EU_CENTRAL_3("EU Central 3"),
+    EU_CENTRAL_4("EU Central 4"),
+    EU_WEST("EU West"),
+    EU_NORTHWEST("EU Northwest"),
+    EU_SOUTHEAST("EU Southeast")
+}
+
 enum class GameControls {
     KEYBOARD, MOUSE, GAMEPAD_PARTIAL, GAMEPAD,
 
@@ -54,5 +72,6 @@ data class Game(
     val status: GameStatus,
     val publisher: String,
     val storeUrl: String,
-    val genres: Set<GameGenre>
+    val genres: Set<GameGenre>,
+    val regions: Set<Region>
 )

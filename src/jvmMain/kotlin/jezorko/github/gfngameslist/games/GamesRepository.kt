@@ -29,7 +29,8 @@ internal object GamesRepository {
                 },
                 publisher = it[Games.publisher],
                 storeUrl = it[Games.storeUrl],
-                genres = GameGenre::class.deserializeSet(it[Games.genres])
+                genres = GameGenre::class.deserializeSet(it[Games.genres]),
+                regions = Region::class.deserializeSet(it[Games.regions])
             )
         }
     }
@@ -58,6 +59,7 @@ internal object GamesRepository {
             updatedValue[publisher] = game.publisher
             updatedValue[storeUrl] = game.storeUrl
             updatedValue[genres] = game.genres.serialize()
+            updatedValue[regions] = game.regions.serialize()
         }
     }
 

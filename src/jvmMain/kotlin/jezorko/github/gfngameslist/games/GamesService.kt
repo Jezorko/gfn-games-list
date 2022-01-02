@@ -72,7 +72,8 @@ internal object GamesService {
                                 status = supportedGame.variants.firstOrNull()?.gfn?.status ?: GameStatus.UNKNOWN,
                                 publisher = supportedGame.publisherName,
                                 storeUrl = "",
-                                genres = supportedGame.genres
+                                genres = supportedGame.genres,
+                                regions = supportedGame.supportedRegions
                             )
                         }
                     GamesRepository.updateGames(games)

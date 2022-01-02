@@ -1,11 +1,7 @@
 package jezorko.github.gfngameslist.nvidia
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import jezorko.github.gfngameslist.games.GameControls
-import jezorko.github.gfngameslist.games.GameGenre
-import jezorko.github.gfngameslist.games.GameStatus
-import jezorko.github.gfngameslist.games.GameStore
-import jezorko.github.gfngameslist.shared.EnumWithReadableName
+import jezorko.github.gfngameslist.games.*
 import jezorko.github.gfngameslist.shared.httpClient
 import jezorko.github.gfngameslist.shared.parseJson
 import mu.KotlinLogging.logger
@@ -15,23 +11,6 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.ZonedDateTime
 
-enum class Region(override val readableName: String) : EnumWithReadableName {
-    US_CENTRAL("US Central"),
-    US_EAST("US East"),
-    US_MIDWEST("US Midwest"),
-    US_NORTHEAST("US Northeast"),
-    US_NORTHWEST("US Northwest"),
-    US_SOUTH("US South"),
-    US_SOUTH_2("US South 2"),
-    US_SOUTHWEST("US Southwest"),
-    US_WEST_2("US West 2"),
-    EU_CENTRAL_2("EU Central 2"),
-    EU_CENTRAL_3("EU Central 3"),
-    EU_CENTRAL_4("EU Central 4"),
-    EU_WEST("EU West"),
-    EU_NORTHWEST("EU Northwest"),
-    EU_SOUTHEAST("EU Southeast")
-}
 
 enum class VpcId(val region: Region) {
     NP_DAL_01(Region.US_CENTRAL),
