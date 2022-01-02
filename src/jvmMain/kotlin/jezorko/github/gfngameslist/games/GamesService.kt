@@ -2,6 +2,7 @@ package jezorko.github.gfngameslist.games
 
 import jezorko.github.gfngameslist.database.Database.doInTransaction
 import jezorko.github.gfngameslist.nvidia.NVidiaApiClient
+import jezorko.github.gfngameslist.nvidia.SupportedGameVariant
 import mu.KotlinLogging.logger
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,7 +31,7 @@ internal object GamesService {
                 .asSequence()
                 .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
-                .filter { game -> store?.let { game.store == store } ?: true }
+                .filter { game -> store?.let { game.stores.any { it == store } } ?: true }
                 .filter { game ->
                     genrePart?.let {
                         game.genres.any { genre ->
@@ -58,20 +59,20 @@ internal object GamesService {
                 if (LatestUpdatesRepository.shouldUpdate()) {
                     log.info { "games update needed, starting" }
                     val games = NVidiaApiClient.fetchSupportedGamesList()
-                        .flatMap { supportedGame -> supportedGame.variants.map { variant -> variant to supportedGame } }
-                        .map { variantToSupportedGame ->
+                        .map { supportedGame ->
                             Game(
-                                id = variantToSupportedGame.second.id,
-                                title = variantToSupportedGame.second.title,
-                                store = variantToSupportedGame.first.appStore,
-                                imageUrl = variantToSupportedGame.second.imageUrl,
-                                registeredAt = variantToSupportedGame.first.gfn.releaseDate?.toInstant()?.toEpochMilli()
+                                id = supportedGame.id,
+                                title = supportedGame.title,
+                                stores = supportedGame.variants.map(SupportedGameVariant::appStore).toSet(),
+                                imageUrl = supportedGame.imageUrl,
+                                registeredAt = supportedGame.variants.firstOrNull()?.gfn?.releaseDate?.toInstant()
+                                    ?.toEpochMilli()
                                     ?: timestampNow,
                                 updatedAt = timestampNow,
-                                status = variantToSupportedGame.first.gfn.status,
-                                publisher = variantToSupportedGame.first.publisherName,
+                                status = supportedGame.variants.firstOrNull()?.gfn?.status ?: GameStatus.UNKNOWN,
+                                publisher = supportedGame.publisherName,
                                 storeUrl = "",
-                                genres = variantToSupportedGame.second.genres
+                                genres = supportedGame.genres
                             )
                         }.toList()
                     games.forEach(GamesRepository::putGame)

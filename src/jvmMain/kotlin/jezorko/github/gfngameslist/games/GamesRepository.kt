@@ -16,11 +16,7 @@ internal object GamesRepository {
             Game(
                 id = it[Games.id].value.toString(),
                 title = it[Games.title],
-                store = try {
-                    GameStore.valueOf(it[Games.store])
-                } catch (exception: IllegalArgumentException) {
-                    GameStore.NONE
-                },
+                stores = GameStore::class.deserializeSet(it[Games.stores]),
                 imageUrl = it[Games.imageUrl],
                 registeredAt = it[Games.registeredAt],
                 updatedAt = it[Games.updatedAt],
@@ -42,7 +38,7 @@ internal object GamesRepository {
         }) { existingValue, updatedValue ->
             val registrationTime = existingValue?.get(registeredAt) ?: -1
             updatedValue[id] = UUID.fromString(game.id)
-            updatedValue[store] = game.store.name
+            updatedValue[stores] = game.stores.serialize()
             updatedValue[title] = game.title
             updatedValue[imageUrl] = game.imageUrl
             updatedValue[registeredAt] = if (registrationTime == -1L) game.registeredAt else registrationTime

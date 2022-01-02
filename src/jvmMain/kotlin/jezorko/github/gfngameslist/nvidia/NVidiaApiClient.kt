@@ -91,7 +91,6 @@ data class SupportedGameVariantGeForceNowInfo(
 data class SupportedGameVariant(
     val appStore: GameStore,
     val id: String,
-    val publisherName: String,
     val supportedControls: Set<GameControls>,
     val gfn: SupportedGameVariantGeForceNowInfo
 )
@@ -101,6 +100,7 @@ data class SupportedGameComputedValues(val allKeywords: Set<String>)
 data class SupportedGame(
     val id: String,
     val title: String,
+    val publisherName: String,
     val genres: Set<GameGenre>,
     val maxLocalPlayers: Int,
     val images: SupportedGameImages?,
@@ -160,10 +160,10 @@ object NVidiaApiClient {
                     "{ apps(vpcId:\"${vpcId.name.replace('_', '-')}\",language: \"en_US\",) {" +
                             "numberReturned pageInfo{ hasNextPage endCursor" +
                             "} items { id" +
-                            " genres images { GAME_BOX_ART HERO_IMAGE KEY_ART TV_BANNER }" +
+                            " genres, publisherName images { GAME_BOX_ART HERO_IMAGE KEY_ART TV_BANNER }" +
                             " computedValues { allKeywords }" +
                             " maxLocalPlayers title variants" +
-                            " { appStore id publisherName supportedControls" +
+                            " { appStore id supportedControls" +
                             " gfn { releaseDate status features { ...feature } } } } } }" +
                             " fragment feature on GfnSubscriptionFeature" +
                             " { __typename ... on GfnSubscriptionFeatureValue { key value } ..." +
@@ -171,9 +171,4 @@ object NVidiaApiClient {
                     "utf-8"
                 )
 
-}
-
-fun main() {
-    val gamesList = NVidiaApiClient.fetchSupportedGamesList()
-    println("yoo")
 }

@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 internal object Games : UUIDTable() {
 
     val title = varchar("title", 255)
-    val store = varchar("store", 255)
+    val stores = varchar("stores", GameStore::class.maxSerializedLength())
     val imageUrl = varchar("image_url", 255)
     val registeredAt = long("registered_at").default(-1)
     val updatedAt = long("updated_at")

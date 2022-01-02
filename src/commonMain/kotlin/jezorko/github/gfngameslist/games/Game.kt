@@ -47,7 +47,7 @@ val validStores = GameStore.values().toSet() - unsupportedStores
 data class Game(
     val id: String,
     val title: String,
-    val store: GameStore,
+    val stores: Set<GameStore>,
     val imageUrl: String,
     val registeredAt: Long,
     val updatedAt: Long,

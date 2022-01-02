@@ -51,7 +51,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
                                 imageElement.style.transform = "scale(1)"
                             } else {
                                 imageElement.style.zIndex = "999"
-                                imageElement.style.transform = "scale(2) translate(50%,0%)"
+                                imageElement.style.transform = "scale(4) translate(50%,0%)"
                             }
                         }
                     }
@@ -72,19 +72,9 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
 
             styledTd {
                 css { +GameDataRowStyles.tableData }
-                props.game.storeUrl.let {
-                    if (it.isNotBlank()) {
-                        styledA {
-                            +props.game.store.readableName
-                            attrs {
-                                href = props.game.storeUrl
-                                target = "_blank"
-                            }
-                        }
-                    } else {
-                        styledDiv {
-                            +props.game.store.readableName
-                        }
+                props.game.stores.forEach { store ->
+                    styledDiv {
+                        +store.readableName
                     }
                 }
             }

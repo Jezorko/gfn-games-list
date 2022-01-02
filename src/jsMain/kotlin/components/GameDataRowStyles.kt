@@ -24,7 +24,7 @@ object GameDataRowStyles : StyleSheet("GameDataRowStyles", isStatic = true) {
         nthChild("even") { backgroundColor = DarkTheme.tableUnknownBackgroundColorEven }
     }
     val gameImage by css {
-        maxWidth = LinearDimension("50%")
-        maxHeight = LinearDimension("50%")
+        maxWidth = LinearDimension("25%")
+        maxHeight = LinearDimension("25%")
     }
 } 
