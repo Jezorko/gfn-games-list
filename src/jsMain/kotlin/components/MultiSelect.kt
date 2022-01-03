@@ -111,7 +111,7 @@ class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiS
                                             if (checked) initialState + index else initialState - index
                                         )
                                     }
-                                    initiallySelected = (state.selectedOptions?.contains(index) == true) // why the fuck is this not updating bitch
+                                    initiallySelected = state.selectedOptions?.contains(index) == true
                                 }
                             }
                         }
