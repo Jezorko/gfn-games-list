@@ -20,7 +20,6 @@ data class Messages(
     val availableOnPlatform: String,
     val publisher: String,
     val genreLabel: String,
-    val keywordsLabel: String,
     val storeLabel: String,
     val searchPlaceholder: String,
     val status: String,
