@@ -1,8 +1,10 @@
 package api
 
+import jezorko.github.gfngameslist.games.GameGenre
 import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.GameStore
 import jezorko.github.gfngameslist.localization.Messages
+import jezorko.github.gfngameslist.shared.serialize
 import jezorko.github.gfngameslist.versions.VersionInfo
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
@@ -38,12 +40,12 @@ object ApiClient {
         titlePart: String?,
         store: GameStore?,
         publisherPart: String?,
-        genrePart: String?
+        genres: List<GameGenre>?
     ): Promise<GetGamesResponse> {
         val titlePartParam = if (titlePart != null) "&title=${encodeURIComponent(titlePart)}" else ""
         val storeParam = if (store != null) "&store=${store.name}" else ""
         val publisherPartParam = if (publisherPart != null) "&publisher=${encodeURIComponent(publisherPart)}" else ""
-        val genrePartParam = if (genrePart != null) "&genre=${encodeURIComponent(genrePart)}" else ""
+        val genrePartParam = if (genres != null) "&genre=${encodeURIComponent(genres.serialize())}" else ""
         return window.fetch(
             "/api/games?limit=$limit&page=$page$titlePartParam$storeParam$publisherPartParam$genrePartParam",
             object : RequestInit {

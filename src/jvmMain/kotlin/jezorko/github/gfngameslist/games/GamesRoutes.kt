@@ -2,6 +2,7 @@ package jezorko.github.gfngameslist.games
 
 import io.ktor.application.*
 import io.ktor.routing.*
+import jezorko.github.gfngameslist.shared.deserializeSet
 import jezorko.github.gfngameslist.shared.respondJson
 
 fun Application.gamesRoutes() = routing {
@@ -16,9 +17,9 @@ fun Application.gamesRoutes() = routing {
             null
         } else null
         val publisherPart = call.request.queryParameters["publisher"]
-        val genrePart = call.request.queryParameters["genre"]
+        val genresFilter = GameGenre::class.deserializeSet(call.request.queryParameters["genre"])
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart, genrePart) })
+        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart, genresFilter) })
         GamesService.updateIfNeeded()
     }
 }

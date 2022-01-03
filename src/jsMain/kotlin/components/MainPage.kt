@@ -35,7 +35,7 @@ external interface MainPageState : State {
     var searchPage: Int?
     var titleSearch: String?
     var publisherSearch: String?
-    var genresSearch: String?
+    var genresSearch: List<String>?
     var storeSearch: GameStore?
     var getGamesResponse: GetGamesResponse?
 }
@@ -99,16 +99,8 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                             value = genre.name
                         )
                     }.filter { it.name.isNotEmpty() }
-                onSelection = { println("current selection is $it") }
+                onSelection = updateState(MainPageState::genresSearch)
                 messages = state.messages
-            }
-        }
-        styledInput(type = InputType.text) {
-            css { +MainPageStyles.element }
-            attrs {
-                id = "game-genres-search"
-                onChangeFunction = updateState(MainPageState::genresSearch)
-                placeholder = state.messages[Messages::searchByGenresPlaceholder]
             }
         }
         styledSelect {
@@ -178,6 +170,11 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         }
     }
 
+    private fun <T> updateState(prop: KMutableProperty1<MainPageState, T>)
+            : (T) -> Unit = { newValue: T ->
+        setState { prop.set(this, newValue) }.then { updateGamesList() }
+    }
+
     private fun updateState(prop: KMutableProperty1<MainPageState, String?>) = updateSearchParam(prop) { it }
     private fun <T> updateSearchParam(prop: KMutableProperty1<MainPageState, T>, valueGetter: (String?) -> T)
             : (Event) -> Unit = { event: Event ->
@@ -207,7 +204,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             state.titleSearch,
             state.storeSearch,
             state.publisherSearch,
-            state.genresSearch
+            state.genresSearch?.map(GameGenre::valueOf)
         ).flatThen { response -> setState { loadingMoreGames = false }.then { response } }
     }
 

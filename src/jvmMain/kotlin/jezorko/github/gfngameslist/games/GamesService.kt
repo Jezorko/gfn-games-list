@@ -23,7 +23,7 @@ internal object GamesService {
         titlePart: String?,
         store: GameStore?,
         publisherPart: String?,
-        genrePart: String?
+        genresFilter: Set<GameGenre>
     ) =
         GetGamesResponse(
             supportedGamesCount = localGamesCache.get().distinctBy(Game::title).count(),
@@ -32,13 +32,7 @@ internal object GamesService {
                 .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> store?.let { game.stores.any { it == store } } ?: true }
-                .filter { game ->
-                    genrePart?.let {
-                        game.genres.any { genre ->
-                            genre.name.contains(it.uppercase())
-                        }
-                    } ?: true
-                }
+                .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
                 .sortedBy(Game::title)
                 .drop(page * limit)
                 .take(limit)
