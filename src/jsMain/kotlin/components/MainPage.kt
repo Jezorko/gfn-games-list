@@ -2,7 +2,10 @@ package components
 
 import api.ApiClient
 import getMainContainer
-import jezorko.github.gfngameslist.games.*
+import jezorko.github.gfngameslist.games.GameGenre
+import jezorko.github.gfngameslist.games.GameStore
+import jezorko.github.gfngameslist.games.GetGamesResponse
+import jezorko.github.gfngameslist.games.validStores
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
 import kotlinx.browser.window
@@ -96,10 +99,10 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         }
         child(MultiSelect::class) {
             attrs {
-                id = "store-search"
+                id = "game-stores-search"
                 name = state.messages[Messages::storeLabel]
                 options =
-                    GameStore.values().map { store ->
+                    validStores.map { store ->
                         Option(
                             name = store.readableName,
                             value = store.name
