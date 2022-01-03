@@ -3,6 +3,8 @@ package components
 import jezorko.github.gfngameslist.games.Game
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
+import kotlinx.css.LinearDimension
+import kotlinx.css.width
 import react.Props
 import react.RBuilder
 import react.RComponent
@@ -18,34 +20,26 @@ class GameDataTable(props: GameDataTableProps) : RComponent<GameDataTableProps, 
 
     override fun RBuilder.render() {
         styledTable {
-            css { +GameDataTableStyles.element }
+            css {
+                +GameDataTableStyles.element
+                width = LinearDimension("100%")
+            }
             styledTbody {
                 css { +GameDataTableStyles.element }
                 styledTr {
                     css { +GameDataTableStyles.element }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::gameImage]
-                    }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::gameTitle]
-                    }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::publisher]
-                    }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::genreLabel]
-                    }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::availableOnPlatform]
-                    }
-                    styledTh {
-                        css { +GameDataTableStyles.element }
-                        +props.messages[Messages::status]
+                    listOf(
+                        Messages::gameImage,
+                        Messages::gameTitle,
+                        Messages::publisher,
+                        Messages::genreLabel,
+                        Messages::availableOnPlatform,
+                        Messages::status
+                    ).forEach {
+                        styledTh {
+                            css { +GameDataTableStyles.element }
+                            +props.messages[it]
+                        }
                     }
                 }
                 props.games.forEachIndexed { index, game ->

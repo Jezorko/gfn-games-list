@@ -67,7 +67,7 @@ class GameDataRow(props: GameDataRowProps) : RComponent<GameDataRowProps, State>
             }
             styledTd {
                 css { +GameDataRowStyles.tableData }
-                styledDiv { +props.game.genres.joinToString(", ") }
+                styledDiv { +props.game.genres.joinToString(", ") { genre -> props.messages[{ it.genres[genre] }] } }
             }
 
             styledTd {
