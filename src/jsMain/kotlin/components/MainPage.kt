@@ -53,14 +53,6 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
     }
 
     override fun RBuilder.render() {
-        child(Toggle::class) {
-            attrs {
-                id = "test"
-                text = "test"
-                onClickFunction = { println("toggle is $it") }
-            }
-        }
-
         styledDiv {
             css { +MainPageStyles.element }
             +state.messages[
@@ -108,6 +100,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                         )
                     }.filter { it.name.isNotEmpty() }
                 onSelection = { println("current selection is $it") }
+                messages = state.messages
             }
         }
         styledInput(type = InputType.text) {

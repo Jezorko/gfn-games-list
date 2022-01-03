@@ -35,5 +35,7 @@
     "SPORTS": "sports",
     "PLATFORMER": "platformer",
     "FAMILY": "family"
-  }
+  },
+  "numberSelected": "$1 selected",
+  "allSelected": "all selected"
 }

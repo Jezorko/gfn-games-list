@@ -23,16 +23,11 @@ external interface ToggleState : State {
 }
 
 class Toggle(props: ToggleProps) : RComponent<ToggleProps, ToggleState>(props) {
-
-    override fun componentDidMount() {
-        setState { isSelected = props.initiallySelected == true }
-    }
-
     override fun RBuilder.render() {
         styledButton {
             +(props.text ?: "toggle needs a text!")
             css {
-                +if (state.isSelected == true) ToggleStyles.selected else ToggleStyles.unselected
+                +if (currentlySelected) ToggleStyles.selected else ToggleStyles.unselected
             }
             attrs {
                 props.id?.let { id = it }
@@ -42,5 +37,11 @@ class Toggle(props: ToggleProps) : RComponent<ToggleProps, ToggleState>(props) {
                 }
             }
         }
+    }
+
+    private val currentlySelected: Boolean get() {
+        val result = state.isSelected ?: (props.initiallySelected == true)
+        println("checking selection for ${props.text} = $result")
+        return result
     }
 }

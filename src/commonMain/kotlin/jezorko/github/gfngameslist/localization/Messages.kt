@@ -26,7 +26,9 @@ data class Messages(
     val searchByTitlePlaceholder: String,
     val searchByPublisherPlaceholder: String,
     val searchByGenresPlaceholder: String,
-    val genres: Map<GameGenre, String>
+    val genres: Map<GameGenre, String>,
+    val numberSelected: String,
+    val allSelected: String
 )
 
 operator fun <T> Messages?.get(

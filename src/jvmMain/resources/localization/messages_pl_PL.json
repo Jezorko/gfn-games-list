@@ -35,5 +35,7 @@
     "SPORTS": "sport",
     "PLATFORMER": "platformowa",
     "FAMILY": "rodzinna"
-  }
+  },
+  "numberSelected": "wybrano $1",
+  "allSelected": "wybrano wszystkie"
 }
