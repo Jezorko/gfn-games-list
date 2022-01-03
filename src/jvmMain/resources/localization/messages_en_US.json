@@ -16,6 +16,7 @@
   "searchByTitlePlaceholder": "search by title",
   "searchByPublisherPlaceholder": "search by publisher",
   "searchByGenresPlaceholder": "genres",
+  "searchByStoresPlaceholder": "stores",
   "genres": {
     "ACTION": "action",
     "ADVENTURE": "adventure",

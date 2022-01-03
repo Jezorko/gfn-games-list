@@ -16,6 +16,7 @@
   "searchByTitlePlaceholder": "wyszukaj po tytule",
   "searchByPublisherPlaceholder": "wyszukaj po wydawcy",
   "searchByGenresPlaceholder": "kategorie",
+  "searchByStoresPlaceholder": "sklepy",
   "genres": {
     "ACTION": "akcja",
     "ADVENTURE": "przygodowa",
