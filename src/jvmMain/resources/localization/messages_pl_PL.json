@@ -4,7 +4,9 @@
   "gameTitle": "tytuł",
   "availableOnPlatform": "gra dostępna na",
   "publisher": "wydawca",
-  "genre": "kategorie",
+  "genreLabel": "kategorie",
+  "storeLabel": "stores",
+  "searchPlaceholder": "wyszukaj",
   "status": "status",
   "specificStatus": {
     "available": "działa w porządku",
@@ -13,10 +15,6 @@
     "unknown": "nieznany"
   },
   "endOfGamesList": "wincyj ni ma!",
-  "searchByTitlePlaceholder": "wyszukaj po tytule",
-  "searchByPublisherPlaceholder": "wyszukaj po wydawcy",
-  "searchByGenresPlaceholder": "kategorie",
-  "searchByStoresPlaceholder": "sklepy",
   "genres": {
     "ACTION": "akcja",
     "ADVENTURE": "przygodowa",

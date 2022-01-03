@@ -37,17 +37,15 @@ object ApiClient {
     fun getGames(
         limit: Int,
         page: Int,
-        titlePart: String?,
+        textSearch: String?,
         stores: List<GameStore>?,
-        publisherPart: String?,
         genres: List<GameGenre>?
     ): Promise<GetGamesResponse> {
-        val titlePartParam = if (titlePart != null) "&title=${encodeURIComponent(titlePart)}" else ""
+        val textSearchParam = if (textSearch != null) "&query=${encodeURIComponent(textSearch)}" else ""
         val storeParam = if (stores != null) "&store=${encodeURIComponent(stores.serialize())}" else ""
-        val publisherPartParam = if (publisherPart != null) "&publisher=${encodeURIComponent(publisherPart)}" else ""
         val genreParam = if (genres != null) "&genre=${encodeURIComponent(genres.serialize())}" else ""
         return window.fetch(
-            "/api/games?limit=$limit&page=$page$titlePartParam$storeParam$publisherPartParam$genreParam",
+            "/api/games?limit=$limit&page=$page$textSearchParam$storeParam$genreParam",
             object : RequestInit {
                 override var method: String? = "GET"
             }

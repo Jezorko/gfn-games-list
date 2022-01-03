@@ -4,7 +4,9 @@
   "gameTitle": "title",
   "availableOnPlatform": "available on",
   "publisher": "publisher",
-  "genre": "genres",
+  "genreLabel": "genres",
+  "storeLabel": "stores",
+  "searchPlaceholder": "search",
   "status": "status",
   "specificStatus": {
     "available": "online",
@@ -13,10 +15,6 @@
     "unknown": "unknown"
   },
   "endOfGamesList": "that's it, folks!",
-  "searchByTitlePlaceholder": "search by title",
-  "searchByPublisherPlaceholder": "search by publisher",
-  "searchByGenresPlaceholder": "genres",
-  "searchByStoresPlaceholder": "stores",
   "genres": {
     "ACTION": "action",
     "ADVENTURE": "adventure",

@@ -33,8 +33,7 @@ external interface MainPageState : State {
     var messages: Messages?
     var limitSearch: Int?
     var searchPage: Int?
-    var titleSearch: String?
-    var publisherSearch: String?
+    var textSearch: String?
     var genresSearch: List<String>?
     var storeSearch: List<String>?
     var getGamesResponse: GetGamesResponse?
@@ -75,23 +74,15 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         styledInput(type = InputType.text) {
             css { +MainPageStyles.element }
             attrs {
-                id = "game-title-search"
-                onChangeFunction = updateState(MainPageState::titleSearch)
-                placeholder = state.messages[Messages::searchByTitlePlaceholder]
-            }
-        }
-        styledInput(type = InputType.text) {
-            css { +MainPageStyles.element }
-            attrs {
-                id = "game-publisher-search"
-                onChangeFunction = updateState(MainPageState::publisherSearch)
-                placeholder = state.messages[Messages::searchByPublisherPlaceholder]
+                id = "game-search-bar"
+                onChangeFunction = updateState(MainPageState::textSearch)
+                placeholder = state.messages[Messages::searchPlaceholder]
             }
         }
         child(MultiSelect::class) {
             attrs {
                 id = "game-genres-search"
-                name = state.messages[Messages::searchByGenresPlaceholder]
+                name = state.messages[Messages::genreLabel]
                 options =
                     GameGenre.values().map { genre ->
                         Option(
@@ -106,7 +97,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         child(MultiSelect::class) {
             attrs {
                 id = "store-search"
-                name = state.messages[Messages::searchByStoresPlaceholder]
+                name = state.messages[Messages::storeLabel]
                 options =
                     GameStore.values().map { store ->
                         Option(
@@ -201,9 +192,8 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
         ApiClient.getGames(
             state.limitSearch ?: 20,
             page,
-            state.titleSearch,
+            state.textSearch,
             state.storeSearch?.map(GameStore::valueOf),
-            state.publisherSearch,
             state.genresSearch?.map(GameGenre::valueOf)
         ).flatThen { response -> setState { loadingMoreGames = false }.then { response } }
     }

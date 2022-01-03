@@ -20,19 +20,20 @@ internal object GamesService {
     fun getGames(
         limit: Int,
         page: Int,
-        titlePart: String?,
+        searchQuery: String?,
         storesFilter: Set<GameStore>,
-        publisherPart: String?,
         genresFilter: Set<GameGenre>
     ) =
         GetGamesResponse(
             supportedGamesCount = localGamesCache.get().distinctBy(Game::title).count(),
             games = localGamesCache.get()
                 .asSequence()
-                .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
-                .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> storesFilter.isEmpty() || game.stores.containsAll(storesFilter) }
                 .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
+                .filter { game -> searchQuery?.uppercase()?.let {
+                    listOf(game.title, game.publisher).map(String::uppercase)
+                        .any { textFragment->textFragment.contains(it) }
+                } ?: true }
                 .sortedBy(Game::title)
                 .drop(page * limit)
                 .take(limit)
