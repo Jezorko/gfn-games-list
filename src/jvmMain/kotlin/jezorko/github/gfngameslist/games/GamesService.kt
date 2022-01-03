@@ -31,7 +31,8 @@ internal object GamesService {
                 .filter { game -> storesFilter.isEmpty() || game.stores.containsAll(storesFilter) }
                 .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
                 .filter { game -> searchQuery?.uppercase()?.let {
-                    listOf(game.title, game.publisher).map(String::uppercase)
+                    listOf(game.title, game.publisher, game.keywords)
+                        .map(String::uppercase)
                         .any { textFragment->textFragment.contains(it) }
                 } ?: true }
                 .sortedBy(Game::title)
@@ -68,7 +69,8 @@ internal object GamesService {
                                 publisher = supportedGame.publisherName,
                                 storeUrl = "",
                                 genres = supportedGame.genres,
-                                regions = supportedGame.supportedRegions
+                                regions = supportedGame.supportedRegions,
+                                keywords = supportedGame.computedValues.allKeywords.joinToString(", ")
                             )
                         }
                     GamesRepository.updateGames(games)

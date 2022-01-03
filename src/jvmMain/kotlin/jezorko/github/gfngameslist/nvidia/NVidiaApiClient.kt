@@ -106,6 +106,7 @@ object NVidiaApiClient {
     private val log = logger {}
 
     fun fetchSupportedGamesList() = VpcId.values().map { vpcId ->
+        log.info { "fetching games from $vpcId" }
         vpcId to httpClient.sendAsync(
             HttpRequest.newBuilder()
                 .uri(URI.create(getGamesUrl(vpcId)))
@@ -116,6 +117,7 @@ object NVidiaApiClient {
         .map { it.first to it.second.get() }
         .flatMap { vpcIdToResponse ->
             if (vpcIdToResponse.second.statusCode() == 200) {
+                log.info { "fetch from ${vpcIdToResponse.first} successful" }
                 parseJson(
                     vpcIdToResponse.second.body(),
                     GetSupportedGamesResponse::class
@@ -123,7 +125,7 @@ object NVidiaApiClient {
                     game.copy(supportedRegions = setOf(vpcIdToResponse.first.region))
                 }
             } else {
-                log.warn { "failed to fetch the list of games from vpc ${vpcIdToResponse.first}, status: ${vpcIdToResponse.second.statusCode()}" }
+                log.warn { "failed to fetch the list of games from ${vpcIdToResponse.first}, status: ${vpcIdToResponse.second.statusCode()}" }
                 emptySequence()
             }
         }

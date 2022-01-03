@@ -32,7 +32,7 @@ object Database {
     /**
      * Update when breaking migrations are applied
      */
-    private const val currentVersion = 1L
+    private const val currentVersion = 2L
 
     private val log = logger {}
     private val sqlLogger = object : SqlLogger {

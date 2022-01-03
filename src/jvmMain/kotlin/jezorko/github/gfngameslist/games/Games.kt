@@ -15,5 +15,6 @@ internal object Games : UUIDTable() {
     val storeUrl = varchar("store_url", 2048)
     val genres = varchar("genres", GameGenre::class.maxSerializedLength())
     val regions = varchar("regions", Region::class.maxSerializedLength())
+    val keywords = varchar("keywords", 32768)
 
 }

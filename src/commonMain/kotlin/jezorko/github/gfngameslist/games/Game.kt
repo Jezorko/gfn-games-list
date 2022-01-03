@@ -72,5 +72,6 @@ data class Game(
     val publisher: String,
     val storeUrl: String,
     val genres: Set<GameGenre>,
-    val regions: Set<Region>
+    val regions: Set<Region>,
+    val keywords: String
 )
