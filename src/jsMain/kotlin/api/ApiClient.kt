@@ -38,16 +38,16 @@ object ApiClient {
         limit: Int,
         page: Int,
         titlePart: String?,
-        store: GameStore?,
+        stores: List<GameStore>?,
         publisherPart: String?,
         genres: List<GameGenre>?
     ): Promise<GetGamesResponse> {
         val titlePartParam = if (titlePart != null) "&title=${encodeURIComponent(titlePart)}" else ""
-        val storeParam = if (store != null) "&store=${store.name}" else ""
+        val storeParam = if (stores != null) "&store=${encodeURIComponent(stores.serialize())}" else ""
         val publisherPartParam = if (publisherPart != null) "&publisher=${encodeURIComponent(publisherPart)}" else ""
-        val genrePartParam = if (genres != null) "&genre=${encodeURIComponent(genres.serialize())}" else ""
+        val genreParam = if (genres != null) "&genre=${encodeURIComponent(genres.serialize())}" else ""
         return window.fetch(
-            "/api/games?limit=$limit&page=$page$titlePartParam$storeParam$publisherPartParam$genrePartParam",
+            "/api/games?limit=$limit&page=$page$titlePartParam$storeParam$publisherPartParam$genreParam",
             object : RequestInit {
                 override var method: String? = "GET"
             }

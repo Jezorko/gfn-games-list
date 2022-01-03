@@ -21,7 +21,7 @@ internal object GamesService {
         limit: Int,
         page: Int,
         titlePart: String?,
-        store: GameStore?,
+        storesFilter: Set<GameStore>,
         publisherPart: String?,
         genresFilter: Set<GameGenre>
     ) =
@@ -31,7 +31,7 @@ internal object GamesService {
                 .asSequence()
                 .filter { game -> titlePart?.let { game.title.uppercase().contains(it.uppercase()) } ?: true }
                 .filter { game -> publisherPart?.let { game.publisher.uppercase().contains(it.uppercase()) } ?: true }
-                .filter { game -> store?.let { game.stores.any { it == store } } ?: true }
+                .filter { game -> storesFilter.isEmpty() || game.stores.containsAll(storesFilter) }
                 .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
                 .sortedBy(Game::title)
                 .drop(page * limit)

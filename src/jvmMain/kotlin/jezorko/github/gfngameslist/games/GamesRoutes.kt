@@ -10,16 +10,11 @@ fun Application.gamesRoutes() = routing {
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
         val page = call.request.queryParameters["page"]?.toInt() ?: 0
         val titlePart = call.request.queryParameters["title"]
-        val storeParam = call.request.queryParameters["store"]
-        val store = if (storeParam != null) try {
-            GameStore.valueOf(storeParam)
-        } catch (exception: IllegalArgumentException) {
-            null
-        } else null
+        val storesFilter = GameStore::class.deserializeSet(call.request.queryParameters["store"])
         val publisherPart = call.request.queryParameters["publisher"]
         val genresFilter = GameGenre::class.deserializeSet(call.request.queryParameters["genre"])
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, store, publisherPart, genresFilter) })
+        call.respondJson(provider = { GamesService.getGames(limit, page, titlePart, storesFilter, publisherPart, genresFilter) })
         GamesService.updateIfNeeded()
     }
 }

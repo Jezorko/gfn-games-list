@@ -36,7 +36,7 @@ external interface MainPageState : State {
     var titleSearch: String?
     var publisherSearch: String?
     var genresSearch: List<String>?
-    var storeSearch: GameStore?
+    var storeSearch: List<String>?
     var getGamesResponse: GetGamesResponse?
 }
 
@@ -103,19 +103,19 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 messages = state.messages
             }
         }
-        styledSelect {
-            css { +MainPageStyles.element }
-            option { +"" }
-            validStores.forEach { validStore -> option { +validStore.readableName } }
+        child(MultiSelect::class) {
             attrs {
                 id = "store-search"
-                onChangeFunction = updateSearchParam(MainPageState::storeSearch) {
-                    if (it == null || it.isEmpty()) {
-                        null
-                    } else {
-                        storeFromReadableName(it)
-                    }
-                }
+                name = state.messages[Messages::searchByStoresPlaceholder]
+                options =
+                    GameStore.values().map { store ->
+                        Option(
+                            name = store.readableName,
+                            value = store.name
+                        )
+                    }.filter { it.name.isNotEmpty() }
+                onSelection = updateState(MainPageState::storeSearch)
+                messages = state.messages
             }
         }
         state.getGamesResponse?.games?.let { games ->
@@ -202,7 +202,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             state.limitSearch ?: 20,
             page,
             state.titleSearch,
-            state.storeSearch,
+            state.storeSearch?.map(GameStore::valueOf),
             state.publisherSearch,
             state.genresSearch?.map(GameGenre::valueOf)
         ).flatThen { response -> setState { loadingMoreGames = false }.then { response } }
