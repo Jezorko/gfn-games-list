@@ -24,8 +24,8 @@ object MultiSelectStyles : StyleSheet("MultiSelectStyles", isStatic = true) {
     val options by css {
         backgroundColor = theme.multiSelectBackground
         position = Position.absolute
-        width = LinearDimension("20%")
-        left = LinearDimension("40%")
+        width = LinearDimension("40%")
+        left = LinearDimension("30%")
     }
 
     val topBar by css {
@@ -38,6 +38,13 @@ object MultiSelectStyles : StyleSheet("MultiSelectStyles", isStatic = true) {
 
     val optionsName by css {
         flexGrow = 1.0
+    }
+
+    val optionsSearch by css {
+        +element
+        flexGrow = 1.0
+        width = LinearDimension.inherit
+        paddingRight = LinearDimension("0.2em")
     }
 
     val closeButton by css {

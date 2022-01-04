@@ -8,6 +8,7 @@ import kotlinx.css.LinearDimension
 import kotlinx.css.display
 import kotlinx.css.top
 import kotlinx.html.id
+import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import react.Props
 import react.RBuilder
@@ -17,9 +18,11 @@ import react.dom.attrs
 import react.dom.div
 import react.dom.strong
 import shared.setState
+import shared.targetValue
 import styled.css
 import styled.styledButton
 import styled.styledDiv
+import styled.styledInput
 
 data class Option(val name: String, val value: String = name)
 
@@ -29,11 +32,13 @@ external interface MultiSelectProps : Props {
     var options: List<Option>
     var onSelection: ((List<String>) -> Unit)?
     var messages: Messages?
+    var searchEnabled: Boolean?
 }
 
 external interface MultiSelectState : State {
     var optionsDisplayed: Boolean?
     var selectedOptions: Set<Int>?
+    var searchQuery: String?
 }
 
 class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiSelectState>(props) {
@@ -77,6 +82,17 @@ class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiS
                             strong { +props.name }
                         }
 
+                        if (props.searchEnabled == true) {
+                            styledInput {
+                                css { +MultiSelectStyles.optionsSearch }
+                                attrs {
+                                    props.id?.let { id = "$it-options-search" }
+                                    placeholder = props.messages[Messages::searchPlaceholder]
+                                    onChangeFunction = { event -> setState { searchQuery = event.targetValue() } }
+                                }
+                            }
+                        }
+
                         if ((state.selectedOptions?.size ?: 0) > 0) {
                             styledButton {
                                 +"reset"
@@ -101,17 +117,20 @@ class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiS
                     div {
                         attrs { props.id?.let { id = "$it-toggles" } }
                         props.options.forEachIndexed { index, option ->
-                            child(Toggle::class) {
-                                attrs {
-                                    props.id?.let { id = "$it-option-${option.value}" }
-                                    text = option.name
-                                    onClickFunction = { checked ->
-                                        val initialState = state.selectedOptions ?: emptySet()
-                                        updateSelection(
-                                            if (checked) initialState + index else initialState - index
-                                        )
+                            if (state.searchQuery?.uppercase()?.replace(" ", "")
+                                    ?.let { option.name.uppercase().replace(" ", "").contains(it) } != false) {
+                                child(Toggle::class) {
+                                    attrs {
+                                        props.id?.let { id = "$it-option-${option.value}" }
+                                        text = option.name
+                                        onClickFunction = { checked ->
+                                            val initialState = state.selectedOptions ?: emptySet()
+                                            updateSelection(
+                                                if (checked) initialState + index else initialState - index
+                                            )
+                                        }
+                                        initiallySelected = state.selectedOptions?.contains(index) == true
                                     }
-                                    initiallySelected = state.selectedOptions?.contains(index) == true
                                 }
                             }
                         }

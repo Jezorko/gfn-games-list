@@ -117,6 +117,7 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                 options = keywords.map(::Option)
                 onSelection = updateState(MainPageState::keywordsSearch)
                 messages = state.messages
+                searchEnabled = true
             }
         }
         state.getGamesResponse?.games?.let { games ->
