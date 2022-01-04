@@ -5,6 +5,7 @@ import kotlinx.html.id
 import org.w3c.dom.HTMLDivElement
 import react.dom.attrs
 import react.dom.render
+import shared.theme
 import styled.css
 import styled.styledDiv
 
@@ -13,6 +14,7 @@ fun getMainContainer(): HTMLDivElement = document.getElementById(MAIN_CONTAINER_
 
 fun main() {
     window.onload = {
+        document.body?.style?.backgroundColor = theme.backgroundColor.toString()
         render(document.getElementById("root")) {
             styledDiv {
                 css { +ClientStyles.mainContainer }
