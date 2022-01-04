@@ -95,7 +95,7 @@ class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiS
 
                         if ((state.selectedOptions?.size ?: 0) > 0) {
                             styledButton {
-                                +"reset"
+                                +props.messages[Messages::resetSearch]
                                 css { +MultiSelectStyles.element }
                                 attrs {
                                     props.id?.let { id = "$it-reset-button" }
@@ -118,7 +118,8 @@ class MultiSelect(props: MultiSelectProps) : RComponent<MultiSelectProps, MultiS
                         attrs { props.id?.let { id = "$it-toggles" } }
                         props.options.forEachIndexed { index, option ->
                             if (state.searchQuery?.uppercase()?.replace(" ", "")
-                                    ?.let { option.name.uppercase().replace(" ", "").contains(it) } != false) {
+                                    ?.let { option.name.uppercase().replace(" ", "").contains(it) } != false
+                            ) {
                                 child(Toggle::class) {
                                     attrs {
                                         props.id?.let { id = "$it-option-${option.value}" }

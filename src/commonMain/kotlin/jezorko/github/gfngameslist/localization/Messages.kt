@@ -28,7 +28,8 @@ data class Messages(
     val endOfGamesList: String,
     val genres: Map<GameGenre, String>,
     val numberSelected: String,
-    val allSelected: String
+    val allSelected: String,
+    val resetSearch: String
 )
 
 operator fun <T> Messages?.get(

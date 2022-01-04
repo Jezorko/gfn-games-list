@@ -37,5 +37,6 @@
     "FAMILY": "family"
   },
   "numberSelected": "$1 selected",
-  "allSelected": "all selected"
+  "allSelected": "all selected",
+  "resetSearch": "reset"
 }
