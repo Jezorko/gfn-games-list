@@ -68,6 +68,24 @@ object Configuration {
         String::toString
     )
 
+    private val HEROKU_APP_NAME: EnvironmentVariable<String?> = EnvironmentVariable(
+        Configuration::HEROKU_APP_NAME,
+        null,
+        String::toString
+    )
+
+    val APPLICATION_URL: EnvironmentVariable<String> = EnvironmentVariable(
+        Configuration::APPLICATION_URL,
+        HEROKU_APP_NAME.value?.let { "https://$it.herokuapp.com/" } ?: "unknown",
+        String::toString
+    )
+
+    val APPLICATION_IMAGE_URL: EnvironmentVariable<String> = EnvironmentVariable(
+        Configuration::APPLICATION_IMAGE_URL,
+        "https://www.nvidia.com/content/dam/en-zz/Solutions/gfn/webassets/geforce-now-og-no-text-1200x630.jpg",
+        String::toString
+    )
+
     val HEROKU_SLUG_COMMIT: EnvironmentVariable<String> = EnvironmentVariable(
         Configuration::HEROKU_SLUG_COMMIT,
         "unknown",

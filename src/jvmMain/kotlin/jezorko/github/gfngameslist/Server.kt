@@ -12,7 +12,9 @@ import io.ktor.util.pipeline.*
 import jezorko.github.gfngameslist.database.databaseRoutes
 import jezorko.github.gfngameslist.games.GamesFacade
 import jezorko.github.gfngameslist.games.gamesRoutes
+import jezorko.github.gfngameslist.localization.alternativeLocales
 import jezorko.github.gfngameslist.localization.localizationRoutes
+import jezorko.github.gfngameslist.localization.primaryLocale
 import jezorko.github.gfngameslist.shared.Configuration
 import jezorko.github.gfngameslist.versions.versionsRoutes
 import kotlinx.html.*
@@ -20,9 +22,46 @@ import mu.KotlinLogging.logger
 
 val log = logger { }
 
+const val applicationTitle = "GeForce NOW Supported Games List"
+const val applicationDescription = "Searchable list of games supported on GeForce NOW"
+
 fun HTML.index() {
     head {
-        title("GeForce NOW Supported Games List")
+        title(applicationTitle)
+        meta {
+            name = "description"
+            content = applicationDescription
+        }
+        meta {
+            attributes["property"] = "og:title"
+            content = applicationTitle
+        }
+        meta {
+            attributes["property"] = "og:url"
+            content = Configuration.APPLICATION_URL.value
+        }
+        meta {
+            attributes["property"] = "og:description"
+            content = applicationDescription
+        }
+        meta {
+            attributes["property"] = "og:image"
+            content = Configuration.APPLICATION_IMAGE_URL.value
+        }
+        meta {
+            attributes["property"] = "og:type"
+            content = "website"
+        }
+        meta {
+            attributes["property"] = "og:locale"
+            content = primaryLocale.toString()
+        }
+        alternativeLocales.forEach {
+            meta {
+                attributes["property"] = "og:locale:alternate"
+                content = it.toString()
+            }
+        }
     }
     body {
         div {

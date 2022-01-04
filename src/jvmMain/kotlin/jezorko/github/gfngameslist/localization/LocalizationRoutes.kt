@@ -12,6 +12,8 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 val messagesCache = ConcurrentHashMap<Locale, Messages?>()
+val primaryLocale = Locale.forLanguageTag("en-US")
+val alternativeLocales = arrayOf(Locale.forLanguageTag("pl-PL"))
 
 private fun loadMessagesForLanguageTag(languageTag: String): Messages? {
     val locale = Locale.forLanguageTag(languageTag)
