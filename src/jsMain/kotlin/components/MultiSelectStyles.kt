@@ -38,13 +38,13 @@ object MultiSelectStyles : StyleSheet("MultiSelectStyles", isStatic = true) {
 
     val optionsName by css {
         flexGrow = 1.0
+        paddingRight = LinearDimension("0.2em")
     }
 
     val optionsSearch by css {
         +element
         flexGrow = 1.0
         width = LinearDimension.inherit
-        paddingRight = LinearDimension("0.2em")
     }
 
     val closeButton by css {
