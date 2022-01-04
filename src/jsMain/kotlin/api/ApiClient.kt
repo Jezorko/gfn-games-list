@@ -1,8 +1,8 @@
 package api
 
 import jezorko.github.gfngameslist.games.GameGenre
-import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.games.GameStore
+import jezorko.github.gfngameslist.games.GetGamesResponse
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.shared.serialize
 import jezorko.github.gfngameslist.versions.VersionInfo
@@ -39,13 +39,15 @@ object ApiClient {
         page: Int,
         textSearch: String?,
         stores: List<GameStore>?,
-        genres: List<GameGenre>?
+        genres: List<GameGenre>?,
+        keywords: List<String>?
     ): Promise<GetGamesResponse> {
         val textSearchParam = if (textSearch != null) "&query=${encodeURIComponent(textSearch)}" else ""
         val storeParam = if (stores != null) "&store=${encodeURIComponent(stores.serialize())}" else ""
         val genreParam = if (genres != null) "&genre=${encodeURIComponent(genres.serialize())}" else ""
+        val keywordsParam = if (keywords != null) "&keywords=${encodeURIComponent(keywords.joinToString(","))}" else ""
         return window.fetch(
-            "/api/games?limit=$limit&page=$page$textSearchParam$storeParam$genreParam",
+            "/api/games?limit=$limit&page=$page$textSearchParam$storeParam$genreParam$keywordsParam",
             object : RequestInit {
                 override var method: String? = "GET"
             }

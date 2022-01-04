@@ -21,7 +21,7 @@ import styled.css
 import styled.styledButton
 import styled.styledDiv
 
-data class Option(val name: String, val value: String)
+data class Option(val name: String, val value: String = name)
 
 external interface MultiSelectProps : Props {
     var id: String?

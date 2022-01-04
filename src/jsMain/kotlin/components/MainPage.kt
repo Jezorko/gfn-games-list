@@ -2,10 +2,7 @@ package components
 
 import api.ApiClient
 import getMainContainer
-import jezorko.github.gfngameslist.games.GameGenre
-import jezorko.github.gfngameslist.games.GameStore
-import jezorko.github.gfngameslist.games.GetGamesResponse
-import jezorko.github.gfngameslist.games.validStores
+import jezorko.github.gfngameslist.games.*
 import jezorko.github.gfngameslist.localization.Messages
 import jezorko.github.gfngameslist.localization.get
 import kotlinx.browser.window
@@ -39,6 +36,7 @@ external interface MainPageState : State {
     var textSearch: String?
     var genresSearch: List<String>?
     var storeSearch: List<String>?
+    var keywordsSearch: List<String>?
     var getGamesResponse: GetGamesResponse?
 }
 
@@ -109,6 +107,15 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
                         )
                     }.filter { it.name.isNotEmpty() }
                 onSelection = updateState(MainPageState::storeSearch)
+                messages = state.messages
+            }
+        }
+        child(MultiSelect::class) {
+            attrs {
+                id = "keywords-search"
+                name = state.messages[Messages::keywordsLabel]
+                options = keywords.map(::Option)
+                onSelection = updateState(MainPageState::keywordsSearch)
                 messages = state.messages
             }
         }
@@ -197,7 +204,8 @@ class MainPage(props: Props) : RComponent<Props, MainPageState>(props) {
             page,
             state.textSearch,
             state.storeSearch?.map(GameStore::valueOf),
-            state.genresSearch?.map(GameGenre::valueOf)
+            state.genresSearch?.map(GameGenre::valueOf),
+            state.keywordsSearch
         ).flatThen { response -> setState { loadingMoreGames = false }.then { response } }
     }
 

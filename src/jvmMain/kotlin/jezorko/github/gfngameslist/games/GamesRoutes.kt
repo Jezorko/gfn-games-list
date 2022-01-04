@@ -12,8 +12,18 @@ fun Application.gamesRoutes() = routing {
         val searchQuery = call.request.queryParameters["query"]
         val storesFilter = GameStore::class.deserializeSet(call.request.queryParameters["store"])
         val genresFilter = GameGenre::class.deserializeSet(call.request.queryParameters["genre"])
+        val keywordsFilter = call.request.queryParameters["keywords"]?.split(",")?.toSet()
 
-        call.respondJson(provider = { GamesService.getGames(limit, page, searchQuery, storesFilter, genresFilter) })
+        call.respondJson(provider = {
+            GamesService.getGames(
+                limit,
+                page,
+                searchQuery,
+                storesFilter,
+                genresFilter,
+                keywordsFilter
+            )
+        })
         GamesService.updateIfNeeded()
     }
 }

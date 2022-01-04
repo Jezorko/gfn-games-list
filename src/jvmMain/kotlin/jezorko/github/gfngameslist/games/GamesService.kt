@@ -22,7 +22,8 @@ internal object GamesService {
         page: Int,
         searchQuery: String?,
         storesFilter: Set<GameStore>,
-        genresFilter: Set<GameGenre>
+        genresFilter: Set<GameGenre>,
+        keywordsFilter: Set<String>?
     ) =
         GetGamesResponse(
             supportedGamesCount = localGamesCache.get().distinctBy(Game::title).count(),
@@ -30,11 +31,22 @@ internal object GamesService {
                 .asSequence()
                 .filter { game -> storesFilter.isEmpty() || game.stores.containsAll(storesFilter) }
                 .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
-                .filter { game -> searchQuery?.uppercase()?.let {
-                    listOf(game.title, game.publisher, game.keywords)
-                        .map(String::uppercase)
-                        .any { textFragment->textFragment.contains(it) }
-                } ?: true }
+                .filter { game ->
+                    keywordsFilter?.map(String::uppercase)?.all { keyword ->
+                        game.keywords
+                            .replace('_', ' ')
+                            .replace('-', ' ')
+                            .uppercase()
+                            .contains(keyword)
+                    } ?: true
+                }
+                .filter { game ->
+                    searchQuery?.uppercase()?.let {
+                        listOf(game.title, game.publisher, game.keywords)
+                            .map(String::uppercase)
+                            .any { textFragment -> textFragment.contains(it) }
+                    } ?: true
+                }
                 .sortedBy(Game::title)
                 .drop(page * limit)
                 .take(limit)

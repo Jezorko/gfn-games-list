@@ -6,6 +6,7 @@
   "publisher": "wydawca",
   "genreLabel": "kategorie",
   "storeLabel": "sklepy",
+  "keywordsLabel": "słowa kluczowe",
   "searchPlaceholder": "wyszukaj",
   "status": "status",
   "specificStatus": {

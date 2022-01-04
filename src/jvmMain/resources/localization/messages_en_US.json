@@ -6,6 +6,7 @@
   "publisher": "publisher",
   "genreLabel": "genres",
   "storeLabel": "stores",
+  "keywordsLabel": "keywords",
   "searchPlaceholder": "search",
   "status": "status",
   "specificStatus": {

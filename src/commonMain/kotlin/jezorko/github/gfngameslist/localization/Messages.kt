@@ -21,6 +21,7 @@ data class Messages(
     val publisher: String,
     val genreLabel: String,
     val storeLabel: String,
+    val keywordsLabel: String,
     val searchPlaceholder: String,
     val status: String,
     val specificStatus: GameStatusMessages,
