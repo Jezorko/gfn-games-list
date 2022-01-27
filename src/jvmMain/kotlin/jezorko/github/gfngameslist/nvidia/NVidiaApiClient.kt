@@ -61,10 +61,17 @@ data class SupportedGameImages(
     val tvBanner: String
 )
 
+data class SupportedGameVariantGeForceNowFeature(
+    @JsonProperty("__typename")
+    val typename: String,
+    val key: String,
+    val value: String
+)
+
 data class SupportedGameVariantGeForceNowInfo(
     val releaseDate: ZonedDateTime?,
     val status: GameStatus,
-    val features: Set<String>
+    val features: Set<SupportedGameVariantGeForceNowFeature>
 )
 
 data class SupportedGameVariant(
