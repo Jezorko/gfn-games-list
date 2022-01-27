@@ -118,11 +118,16 @@ object NVidiaApiClient {
         .flatMap { vpcIdToResponse ->
             if (vpcIdToResponse.second.statusCode() == 200) {
                 log.info { "fetch from ${vpcIdToResponse.first} successful" }
-                parseJson(
-                    vpcIdToResponse.second.body(),
-                    GetSupportedGamesResponse::class
-                ).data.apps.items.asSequence().map { game ->
-                    game.copy(supportedRegions = setOf(vpcIdToResponse.first.region))
+                try {
+                    parseJson(
+                        vpcIdToResponse.second.body(),
+                        GetSupportedGamesResponse::class
+                    ).data.apps.items.asSequence().map { game ->
+                        game.copy(supportedRegions = setOf(vpcIdToResponse.first.region))
+                    }
+                } catch (jsonParseException: Exception) {
+                    log.error(jsonParseException) { "failed to parse response body: ${vpcIdToResponse.second.body()}" }
+                    emptySequence()
                 }
             } else {
                 log.warn { "failed to fetch the list of games from ${vpcIdToResponse.first}, status: ${vpcIdToResponse.second.statusCode()}" }
@@ -134,6 +139,11 @@ object NVidiaApiClient {
             game.copy(supportedRegions = gamesSoFar.supportedRegions + game.supportedRegions)
         }.values
         .toList()
+        .also { gamesList ->
+            if (gamesList.isEmpty()) {
+                throw IllegalStateException("failed to fetch game data")
+            }
+        }
 
     private fun getGamesUrl(vpcId: VpcId) =
         "https://public.games.geforce.com/graphql?requestType=apps&query=" +
