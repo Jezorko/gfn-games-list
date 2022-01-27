@@ -126,7 +126,7 @@ object NVidiaApiClient {
                         game.copy(supportedRegions = setOf(vpcIdToResponse.first.region))
                     }
                 } catch (jsonParseException: Exception) {
-                    log.error(jsonParseException) { "failed to parse response body: ${vpcIdToResponse.second.body()}" }
+                    log.error(jsonParseException) { "failed to parse response body from ${vpcIdToResponse.first}" }
                     emptySequence()
                 }
             } else {
