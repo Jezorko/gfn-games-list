@@ -24,10 +24,12 @@ internal object GamesService {
         storesFilter: Set<GameStore>,
         genresFilter: Set<GameGenre>,
         keywordsFilter: Set<String>?
-    ) =
+    ) = localGamesCache.get().let { gamesFromCache ->
+        val games = gamesFromCache.ifEmpty { GamesRepository.findAll().also(localGamesCache::set) }
+
         GetGamesResponse(
-            supportedGamesCount = localGamesCache.get().distinctBy(Game::title).count(),
-            games = localGamesCache.get()
+            supportedGamesCount = games.distinctBy(Game::title).count(),
+            games = games
                 .asSequence()
                 .filter { game -> storesFilter.isEmpty() || game.stores.containsAll(storesFilter) }
                 .filter { game -> genresFilter.isEmpty() || game.genres.containsAll(genresFilter) }
@@ -53,6 +55,7 @@ internal object GamesService {
                 .toList(),
             lastUpdatedAt = lastLocalCacheUpdateTimestamp.get(),
         )
+    }
 
     fun updateIfNeeded() {
         if (updateOngoing.getAndSet(true)) {

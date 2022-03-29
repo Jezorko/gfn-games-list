@@ -10,7 +10,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import jezorko.github.gfngameslist.database.databaseRoutes
-import jezorko.github.gfngameslist.games.GamesFacade
 import jezorko.github.gfngameslist.games.gamesRoutes
 import jezorko.github.gfngameslist.localization.alternativeLocales
 import jezorko.github.gfngameslist.localization.localizationRoutes
@@ -75,7 +74,6 @@ fun main() {
     log.info { "admin token is ${Configuration.ADMIN_TOKEN.value}" }
 
     embeddedServer(Netty, port = Configuration.PORT.value) {
-        GamesFacade.updateIfNeeded()
         routing {
             get("/") { call.respondHtml(HttpStatusCode.OK, HTML::index) }
             get("/favicon.ico") { call.respondRedirect("https://www.nvidia.com/favicon.ico") }
